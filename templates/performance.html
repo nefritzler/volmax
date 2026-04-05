@@ -347,15 +347,8 @@
   color: var(--text-dim);
 }
 
-.fx-pad.red    { border-color: rgba(255,60,60,0.4);   background: rgba(255,60,60,0.08); }
-.fx-pad.purple { border-color: rgba(123,92,255,0.4);  background: rgba(123,92,255,0.08); }
-.fx-pad.blue   { border-color: rgba(60,120,255,0.4);  background: rgba(60,120,255,0.08); }
-
 /* FX pad active & pressing states */
-.fx-pad.active          { background: rgba(123,92,255,0.22); border-color: var(--accent); box-shadow: 0 0 10px rgba(123,92,255,0.4); }
-.fx-pad.red.active      { background: rgba(255,60,60,0.22);  border-color: rgba(255,60,60,0.9); box-shadow: 0 0 10px rgba(255,60,60,0.45); }
-.fx-pad.purple.active   { background: rgba(123,92,255,0.22); border-color: var(--accent);       box-shadow: 0 0 10px rgba(123,92,255,0.45); }
-.fx-pad.blue.active     { background: rgba(60,120,255,0.22); border-color: rgba(60,120,255,0.9); box-shadow: 0 0 10px rgba(60,120,255,0.45); }
+.fx-pad.active { background: rgba(60,120,255,0.22); border-color: rgba(60,120,255,0.9); box-shadow: 0 0 10px rgba(60,120,255,0.45); }
 .fx-pad.pressing        { transform: scale(0.94); opacity: 0.8; transition: transform 0.05s; }
 
 /* Zone slider cursor */
@@ -518,9 +511,9 @@
             </div>
             <!-- FX Pads -->
             <div class="fx-grid">
-              <div class="fx-pad red" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
-              <div class="fx-pad purple" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Color Wash</div></div>
-              <div class="fx-pad blue" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
+              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
+              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Color Wash</div></div>
+              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Flash</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Rainbow</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Fade</div></div>
@@ -624,7 +617,9 @@ function selectMode(btn) {
 
 // ── FX Pads ─────────────────────────────────────────────────────
 function toggleFx(pad) {
-  pad.classList.toggle('active');
+  var wasActive = pad.classList.contains('active');
+  document.querySelectorAll('.fx-pad').forEach(function(p) { p.classList.remove('active'); });
+  if (!wasActive) pad.classList.add('active');
 }
 
 // ── Intensity Knob ──────────────────────────────────────────────
