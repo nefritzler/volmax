@@ -196,21 +196,45 @@
   white-space: nowrap;
 }
 
-/* ── Mode Selection (inside deck content) ─── */
-.mode-row-label {
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 5px;
+/* ── Album Art + Mode Row ─── */
+.deck-art-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
-.modes-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 5px;
+.album-art {
+  width: 192px;
+  height: 192px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  position: relative;
 }
+
+.album-art::after {
+  content: '';
+  position: absolute;
+  width: 28px; height: 28px;
+  background: var(--bg);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+.modes-side {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 5px;
+  align-self: stretch;
+}
+
+/* ── Mode Selection (inside deck content) ─── */
 
 .mode-btn {
   background: var(--surface2);
@@ -436,6 +460,16 @@
             </div>
             <div class="track-title">Come Alive</div>
             <div class="track-artist">DJ Snake · Energy: High</div>
+            <!-- Album Art + Mode Selection -->
+            <div class="deck-art-row">
+              <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #6a3ccc, #1a0a40)"></div>
+              <div class="modes-side">
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Chill</div></div>
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Bounce</div></div>
+                <div class="mode-btn active" onclick="selectMode(this)"><div class="mode-name">Hype</div></div>
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
+              </div>
+            </div>
             <!-- Progress / time remaining -->
             <div class="perf-progress">
               <span class="perf-time">3:28</span>
@@ -453,14 +487,6 @@
               <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
               <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
             </div>
-            <!-- Mode Selection -->
-            <div class="mode-row-label">Mode</div>
-            <div class="modes-row">
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Chill</div></div>
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Bounce</div></div>
-              <div class="mode-btn active" onclick="selectMode(this)"><div class="mode-name">Hype</div></div>
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
-            </div>
           </div>
 
           <!-- ── Deck B Content (hidden by default) ── -->
@@ -473,6 +499,16 @@
             </div>
             <div class="track-title">Titanium (DJ Edit)</div>
             <div class="track-artist">David Guetta · Energy: Medium</div>
+            <!-- Album Art + Mode Selection -->
+            <div class="deck-art-row">
+              <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #cc5500, #1a0800)"></div>
+              <div class="modes-side">
+                <div class="mode-btn active" onclick="selectMode(this)"><div class="mode-name">Chill</div></div>
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Bounce</div></div>
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Hype</div></div>
+                <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
+              </div>
+            </div>
             <div class="perf-progress">
               <span class="perf-time">0:00</span>
               <div class="perf-scrub-track">
@@ -486,14 +522,6 @@
               <div class="pcm-seg" style="width:30%;background:#ffaa00"></div>
               <div class="pcm-seg" style="width:30%;background:#ff00cc"></div>
               <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
-            </div>
-            <!-- Mode Selection -->
-            <div class="mode-row-label">Mode</div>
-            <div class="modes-row">
-              <div class="mode-btn active" onclick="selectMode(this)"><div class="mode-name">Chill</div></div>
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Bounce</div></div>
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Hype</div></div>
-              <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
             </div>
           </div>
 
