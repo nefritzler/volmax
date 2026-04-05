@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLMAX — Tracks</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<style>
+@keyframes pulse { to { opacity: 0.3; } }
+
+/* ── Deck Status Bar ── */
+.deck-status-row {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.deck-status-item {
+  flex: 1;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.deck-status-item + .deck-status-item {
+  border-left: 1px solid var(--border);
+}
+.dsi-badge {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.dsi-badge.live { color: var(--green); }
+.dsi-badge.cue  { color: var(--orange); }
+.dsi-track {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dsi-artist {
+  font-size: 10px;
+  color: var(--text-dim);
+}
+.live-pip {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  margin-left: 4px;
+  vertical-align: middle;
+  box-shadow: 0 0 5px var(--green);
+  animation: pulse 0.6s ease infinite alternate;
+}
+
+/* ── Search Bar ── */
+.search-bar {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.search-input {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--text-dim);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Track Row ── */
+.track-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+.track-row.selected {
+  background: rgba(123,92,255,0.06);
+}
+.track-row-art {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+.track-row-info { flex: 1; min-width: 0; }
+.track-row-name {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.track-row-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+.track-row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.track-row-duration {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.track-mini-map {
+  width: 52px; height: 7px;
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+}
+.tmm-seg { height: 100%; }
+
+/* ── On-deck badge inside row ── */
+.on-deck-badge {
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+.on-deck-badge.live {
+  background: rgba(0,229,160,0.12);
+  border: 1px solid rgba(0,229,160,0.35);
+  color: var(--green);
+}
+.on-deck-badge.cue {
+  background: rgba(255,140,66,0.12);
+  border: 1px solid rgba(255,140,66,0.3);
+  color: var(--orange);
+}
+
+/* ── Expanded Phase Editor ── */
+.phase-editor {
+  background: rgba(123,92,255,0.04);
+  border-bottom: 2px solid rgba(123,92,255,0.25);
+  padding-bottom: 8px;
+}
+.phase-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px 6px;
+}
+.phase-editor-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.phase-editor-save {
+  background: var(--accent);
+  border: none;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* ── Phase Row ── */
+.phase-rows {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.phase-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 7px 10px;
+}
+.phase-color-bar {
+  width: 4px;
+  border-radius: 2px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+.phase-row-content { flex: 1; min-width: 0; }
+.phase-row-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+.phase-row-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+.phase-row-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+.phase-row-time {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+.phase-edit-btn {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+.phase-row.highlight {
+  border-color: rgba(255,60,172,0.3);
+  background: rgba(255,60,172,0.05);
+}
+.phase-row.highlight-orange {
+  border-color: rgba(255,140,66,0.3);
+  background: rgba(255,140,66,0.05);
+}
+</style>
+</head>
+<body>
+<div class="preview-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">VOL<span>MAX</span></div>
+      <div class="sub">Design Preview</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Screens</div>
+      <a href="/" class="nav-link">Overview</a>
+      <a href="/performance" class="nav-link">Live</a>
+      <a href="/setup" class="nav-link">Fixture Setup</a>
+      <a href="/zones" class="nav-link">Zones</a>
+      <a href="/timeline" class="nav-link active">Tracks</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="screen-label">Screen 4 · Playlist Manager</div>
+      <h1>Tracks</h1>
+      <p>Browse your playlist and review or edit the auto-detected phase analysis for any track. Saved changes apply automatically in Live.</p>
+    </div>
+
+    <div class="phone-frame-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <!-- Deck status -->
+          <div class="deck-status-row">
+            <div class="deck-status-item">
+              <div class="dsi-badge live">Deck A · Live<span class="live-pip"></span></div>
+              <div class="dsi-track">Come Alive</div>
+              <div class="dsi-artist">DJ Snake · 128 BPM</div>
+            </div>
+            <div class="deck-status-item">
+              <div class="dsi-badge cue">Deck B · Cue</div>
+              <div class="dsi-track">Titanium (DJ Edit)</div>
+              <div class="dsi-artist">David Guetta · 130 BPM</div>
+            </div>
+          </div>
+
+          <!-- Search bar -->
+          <div class="search-bar">
+            <div class="search-input">🔍 &nbsp;Search tracks…</div>
+          </div>
+
+          <!-- Track: Come Alive (LIVE — read-only) -->
+          <div class="track-row">
+            <div class="track-row-art" style="background:linear-gradient(135deg,#4a00e0,#7b5cff)">🎵</div>
+            <div class="track-row-info">
+              <div class="track-row-name">Come Alive</div>
+              <div class="track-row-meta">DJ Snake · 128 BPM · F min</div>
+            </div>
+            <div class="track-row-right">
+              <span class="on-deck-badge live">LIVE</span>
+              <div class="track-mini-map">
+                <div class="tmm-seg" style="width:14%;background:rgba(123,92,255,0.6)"></div>
+                <div class="tmm-seg" style="width:22%;background:rgba(123,92,255,0.85)"></div>
+                <div class="tmm-seg" style="width:12%;background:rgba(255,60,172,0.55)"></div>
+                <div class="tmm-seg" style="width:28%;background:rgba(255,60,172,0.95)"></div>
+                <div class="tmm-seg" style="width:24%;background:rgba(0,229,160,0.6)"></div>
+              </div>
+              <div class="track-row-duration">4:55</div>
+            </div>
+          </div>
+
+          <!-- Track: Titanium (CUE — selected & expanded) -->
+          <div class="track-row selected">
+            <div class="track-row-art" style="background:linear-gradient(135deg,#ff3cac,#ff8c42)">🎵</div>
+            <div class="track-row-info">
+              <div class="track-row-name">Titanium (DJ Edit)</div>
+              <div class="track-row-meta">David Guetta · 130 BPM · A min</div>
+            </div>
+            <div class="track-row-right">
+              <span class="on-deck-badge cue">CUE</span>
+              <div class="track-mini-map">
+                <div class="tmm-seg" style="width:12%;background:rgba(123,92,255,0.6)"></div>
+                <div class="tmm-seg" style="width:20%;background:rgba(123,92,255,0.85)"></div>
+                <div class="tmm-seg" style="width:10%;background:rgba(255,60,172,0.55)"></div>
+                <div class="tmm-seg" style="width:18%;background:rgba(255,60,172,0.98)"></div>
+                <div class="tmm-seg" style="width:10%;background:rgba(90,58,191,0.6)"></div>
+                <div class="tmm-seg" style="width:20%;background:rgba(255,140,66,0.92)"></div>
+                <div class="tmm-seg" style="width:10%;background:rgba(0,229,160,0.6)"></div>
+              </div>
+              <div class="track-row-duration">5:42</div>
+            </div>
+          </div>
+
+          <!-- Phase editor (expanded for Titanium) -->
+          <div class="phase-editor">
+            <div class="phase-editor-header">
+              <div class="phase-editor-label">Phases · Titanium (DJ Edit)</div>
+              <div class="phase-editor-save">Save</div>
+            </div>
+            <div class="phase-rows">
+              <div class="phase-row">
+                <div class="phase-color-bar" style="background:#7b5cff"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Intro</div>
+                  <div class="phase-row-meta">Purple · Chill · 72%</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">0:00–0:41</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+              <div class="phase-row">
+                <div class="phase-color-bar" style="background:#7b5cff"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Verse 1</div>
+                  <div class="phase-row-meta">Purple · Bounce · 65%</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">0:41–1:54</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+              <div class="phase-row highlight">
+                <div class="phase-color-bar" style="background:#ff3cac"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Drop 1 — Highlight ⚡</div>
+                  <div class="phase-row-meta">Pink · Hype · 100% · Flash on beat</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">1:54–3:01</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+              <div class="phase-row">
+                <div class="phase-color-bar" style="background:#5a3abf"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Breakdown</div>
+                  <div class="phase-row-meta">Deep purple · Chill · 40%</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">3:01–3:38</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+              <div class="phase-row highlight-orange">
+                <div class="phase-color-bar" style="background:#ff8c42"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Drop 2 — Highlight ⚡</div>
+                  <div class="phase-row-meta">Orange · Drop · 100% · Strobe burst</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">3:38–4:52</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+              <div class="phase-row">
+                <div class="phase-color-bar" style="background:#00e5a0"></div>
+                <div class="phase-row-content">
+                  <div class="phase-row-name">Outro</div>
+                  <div class="phase-row-meta">Green · Chill · 35%</div>
+                </div>
+                <div class="phase-row-right">
+                  <div class="phase-row-time">4:52–5:42</div>
+                  <div class="phase-edit-btn">Edit ›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Track: Levels -->
+          <div class="track-row">
+            <div class="track-row-art" style="background:linear-gradient(135deg,#ff8c42,#ffcc00)">🎵</div>
+            <div class="track-row-info">
+              <div class="track-row-name">Levels</div>
+              <div class="track-row-meta">Avicii · 126 BPM · C# maj</div>
+            </div>
+            <div class="track-row-right">
+              <div class="track-mini-map">
+                <div class="tmm-seg" style="width:18%;background:rgba(255,140,66,0.5)"></div>
+                <div class="tmm-seg" style="width:26%;background:rgba(255,140,66,0.8)"></div>
+                <div class="tmm-seg" style="width:14%;background:rgba(255,204,0,0.55)"></div>
+                <div class="tmm-seg" style="width:28%;background:rgba(255,204,0,0.95)"></div>
+                <div class="tmm-seg" style="width:14%;background:rgba(255,140,66,0.5)"></div>
+              </div>
+              <div class="track-row-duration">3:28</div>
+            </div>
+          </div>
+
+          <!-- Track: One More Time -->
+          <div class="track-row">
+            <div class="track-row-art" style="background:linear-gradient(135deg,#00e5a0,#4a00e0)">🎵</div>
+            <div class="track-row-info">
+              <div class="track-row-name">One More Time</div>
+              <div class="track-row-meta">Daft Punk · 124 BPM · B♭ maj</div>
+            </div>
+            <div class="track-row-right">
+              <div class="track-mini-map">
+                <div class="tmm-seg" style="width:16%;background:rgba(0,229,160,0.5)"></div>
+                <div class="tmm-seg" style="width:24%;background:rgba(0,229,160,0.8)"></div>
+                <div class="tmm-seg" style="width:12%;background:rgba(74,0,224,0.5)"></div>
+                <div class="tmm-seg" style="width:22%;background:rgba(74,0,224,0.9)"></div>
+                <div class="tmm-seg" style="width:12%;background:rgba(0,229,160,0.45)"></div>
+                <div class="tmm-seg" style="width:14%;background:rgba(0,229,160,0.65)"></div>
+              </div>
+              <div class="track-row-duration">5:20</div>
+            </div>
+          </div>
+
+          <!-- Track: Animals -->
+          <div class="track-row">
+            <div class="track-row-art" style="background:linear-gradient(135deg,#3c78ff,#ff3cac)">🎵</div>
+            <div class="track-row-info">
+              <div class="track-row-name">Animals</div>
+              <div class="track-row-meta">Martin Garrix · 128 BPM · G min</div>
+            </div>
+            <div class="track-row-right">
+              <div class="track-mini-map">
+                <div class="tmm-seg" style="width:12%;background:rgba(60,120,255,0.55)"></div>
+                <div class="tmm-seg" style="width:20%;background:rgba(60,120,255,0.8)"></div>
+                <div class="tmm-seg" style="width:10%;background:rgba(255,60,172,0.55)"></div>
+                <div class="tmm-seg" style="width:32%;background:rgba(255,60,172,1)"></div>
+                <div class="tmm-seg" style="width:26%;background:rgba(60,120,255,0.7)"></div>
+              </div>
+              <div class="track-row-duration">4:02</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Annotations -->
+      <div class="annotation-panel">
+        <h3>Design Notes</h3>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">1</div>
+          <div class="annotation-text">
+            <strong>Deck Status Bar</strong>
+            <p>Shows which tracks are currently loaded on each deck (LIVE / CUE). Deck A (LIVE) is read-only — you can't edit its phases mid-set. Deck B (CUE) is the natural edit target before the mix transition.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot">2</div>
+          <div class="annotation-text">
+            <strong>Playlist Browser</strong>
+            <p>All tracks in the DJ's library with a mini color map strip showing the auto-detected phases at a glance. Tap any track to expand its phase editor. LIVE and CUE badges mark which tracks are on the decks.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot pink">3</div>
+          <div class="annotation-text">
+            <strong>Phase Editor</strong>
+            <p>Auto-detected sections from audio analysis — energy, frequency, and BPM transitions. Each phase shows its color, mode, and energy level. Tap <em>Edit ›</em> on any row to change color, mode, or energy. Highlighted phases (Drop, Chorus) show with a tinted background.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot orange">4</div>
+          <div class="annotation-text">
+            <strong>Syncs to Live</strong>
+            <p>Saving changes here updates the color map and mode triggers that fire automatically on the Live screen. No waveform scrubbing here — that view lives in Live where it's useful live.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">5</div>
+          <div class="annotation-text">
+            <strong>Phase Labels ⚡</strong>
+            <p>Drops and other key moments are flagged with ⚡ and a highlight glow. These are the moments that trigger the highlight color burst automatically during the set. DJ can rename, remove, or reassign them.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLMAX — Design Preview</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<style>
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  width: 100%;
+  max-width: 960px;
+}
+
+.screen-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.2s;
+  display: block;
+}
+
+.screen-card:hover {
+  border-color: var(--accent);
+  background: var(--surface2);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(123,92,255,0.15);
+}
+
+.screen-card .emoji { font-size: 28px; margin-bottom: 12px; }
+
+.screen-card h2 {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.screen-card p {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.screen-card .features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.feature-pill {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: var(--surface2);
+  border-radius: 20px;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+}
+
+.hero {
+  width: 100%;
+  max-width: 960px;
+  background: linear-gradient(135deg, rgba(123,92,255,0.15) 0%, rgba(255,60,172,0.08) 100%);
+  border: 1px solid rgba(123,92,255,0.3);
+  border-radius: 20px;
+  padding: 32px 36px;
+  margin-bottom: 32px;
+}
+
+.hero .tagline {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.hero h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 560px;
+  line-height: 1.6;
+}
+
+.mvp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(0,229,160,0.1);
+  border: 1px solid rgba(0,229,160,0.3);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--green);
+  margin-top: 16px;
+}
+</style>
+</head>
+<body>
+<div class="preview-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">VOL<span>MAX</span></div>
+      <div class="sub">Design Preview</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Screens</div>
+      <a href="/" class="nav-link active">Overview</a>
+      <a href="/performance" class="nav-link">Live</a>
+      <a href="/setup" class="nav-link">Fixture Setup</a>
+      <a href="/zones" class="nav-link">Zones</a>
+      <a href="/timeline" class="nav-link">Tracks</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="hero">
+      <div class="tagline">VOLMAX Lighting · iOS App</div>
+      <h1>Design Preview System</h1>
+      <p>"The first lighting app where DJs never think about lighting." — View each screen below to design and iterate on the UI.</p>
+      <div class="mvp-badge">MVP Scope Defined</div>
+    </div>
+
+    <div class="overview-grid">
+      <a href="/performance" class="screen-card">
+        <h2>Live</h2>
+        <p>The main screen. Single-screen, touch-first live control during a set.</p>
+        <div class="features">
+          <span class="feature-pill">BPM Sync</span>
+          <span class="feature-pill">Color Engine</span>
+          <span class="feature-pill">Mode System</span>
+          <span class="feature-pill">FX Pads</span>
+        </div>
+      </a>
+
+      <a href="/setup" class="screen-card">
+        <h2>Fixture Setup</h2>
+        <p>Wi-Fi light discovery and zone assignment. No channels, no universes.</p>
+        <div class="features">
+          <span class="feature-pill">Auto-discover</span>
+          <span class="feature-pill">Zone assign</span>
+          <span class="feature-pill">Name lights</span>
+        </div>
+      </a>
+
+      <a href="/zones" class="screen-card">
+        <h2>Zone Manager</h2>
+        <p>Visual grouping: Dance Floor, Booth, Chill Area — each with its own palette and energy.</p>
+        <div class="features">
+          <span class="feature-pill">Color palette</span>
+          <span class="feature-pill">Energy level</span>
+          <span class="feature-pill">Independent modes</span>
+        </div>
+      </a>
+
+      <a href="/timeline" class="screen-card">
+        <h2>Tracks</h2>
+        <p>Playlist browser. Review and edit the auto-detected phase analysis for any track before the set.</p>
+        <div class="features">
+          <span class="feature-pill">Phase editor</span>
+          <span class="feature-pill">Color map</span>
+          <span class="feature-pill">Highlight zones</span>
+        </div>
+      </a>
+    </div>
+  </main>
+</div>
+</body>
+</html>

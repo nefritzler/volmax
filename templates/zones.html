@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLMAX — Zone Manager</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<style>
+/* ── Zones Header ─── */
+.zones-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.zones-title { font-size: 17px; font-weight: 700; }
+
+.add-btn {
+  width: 28px; height: 28px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 1;
+  color: #fff;
+  font-weight: 300;
+}
+
+/* ── Zone Card ─── */
+.zone-list {
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zone-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.zone-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 10px;
+}
+
+.zone-swatch {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.zone-card-title { flex: 1; }
+.zone-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+.zone-card-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+.zone-toggle {
+  width: 38px; height: 22px;
+  border-radius: 11px;
+  background: var(--accent);
+  position: relative;
+  flex-shrink: 0;
+}
+.zone-toggle::after {
+  content: '';
+  position: absolute;
+  right: 2px; top: 2px;
+  width: 18px; height: 18px;
+  background: #fff;
+  border-radius: 50%;
+}
+.zone-toggle.off {
+  background: var(--border);
+}
+.zone-toggle.off::after { right: auto; left: 2px; }
+
+.zone-card-body {
+  padding: 0 14px 14px;
+}
+
+/* ── Color palette ─── */
+.palette-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.palette-row {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 12px;
+}
+
+.palette-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+}
+.palette-dot.selected {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.15);
+}
+.palette-dot.add {
+  background: var(--surface);
+  border: 2px dashed var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* ── Energy slider ─── */
+.energy-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.energy-label-text {
+  font-size: 11px;
+  color: var(--text-dim);
+  width: 44px;
+  flex-shrink: 0;
+}
+
+.slider-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  position: relative;
+}
+
+.slider-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px; height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.energy-value {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text);
+  width: 30px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── Mode chips ─── */
+.mode-chip-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.mode-chip {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+}
+
+.mode-chip.active {
+  background: rgba(123,92,255,0.2);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ── Fixture count ─── */
+.fixture-count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px 10px;
+  border-top: 1px solid var(--border);
+  margin-top: 2px;
+}
+
+.fixture-count-text {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.fixture-count-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+/* ── Add zone row ─── */
+.add-zone-row {
+  margin: 4px 16px 24px;
+  background: var(--surface2);
+  border: 1px dashed var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-dim);
+  font-size: 13px;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+<div class="preview-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">VOL<span>MAX</span></div>
+      <div class="sub">Design Preview</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Screens</div>
+      <a href="/" class="nav-link">Overview</a>
+      <a href="/performance" class="nav-link">Live</a>
+      <a href="/setup" class="nav-link">Fixture Setup</a>
+      <a href="/zones" class="nav-link active">Zones</a>
+      <a href="/timeline" class="nav-link">Tracks</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="screen-label">Screen 3 · Configuration</div>
+      <h1>Zone Manager</h1>
+      <p>Visual groupings — Dance Floor, Booth, Chill Area. Each zone has its own color palette, energy level, and independent lighting mode.</p>
+    </div>
+
+    <div class="phone-frame-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <div class="zones-header">
+            <div class="zones-title">Zones</div>
+            <div class="add-btn">+</div>
+          </div>
+
+          <div class="zone-list">
+
+            <!-- Dance Floor -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch" style="background:rgba(123,92,255,0.2)"></div>
+                <div class="zone-card-title">
+                  <div class="zone-card-name">Dance Floor</div>
+                  <div class="zone-card-sub">2 fixtures · Hype mode</div>
+                </div>
+                <div class="zone-toggle"></div>
+              </div>
+              <div class="zone-card-body">
+                <div class="palette-label">Color Palette</div>
+                <div class="palette-row">
+                  <div class="palette-dot selected" style="background:#7b5cff"></div>
+                  <div class="palette-dot" style="background:#4a00e0"></div>
+                  <div class="palette-dot" style="background:#ff3cac"></div>
+                  <div class="palette-dot" style="background:#ff8c42"></div>
+                  <div class="palette-dot add">+</div>
+                </div>
+                <div class="palette-label">Energy</div>
+                <div class="energy-row">
+                  <div class="energy-label-text">Low</div>
+                  <div class="slider-track">
+                    <div class="slider-fill" style="width:88%;background:#7b5cff"></div>
+                    <div class="slider-thumb" style="left:calc(88% - 8px)"></div>
+                  </div>
+                  <div class="energy-value">88%</div>
+                </div>
+                <div class="palette-label">Mode</div>
+                <div class="mode-chip-row">
+                  <div class="mode-chip">Chill</div>
+                  <div class="mode-chip">Bounce</div>
+                  <div class="mode-chip active">Hype</div>
+                  <div class="mode-chip">Drop</div>
+                </div>
+              </div>
+              <div class="fixture-count-row">
+                <div class="fixture-count-text">Par Can Left, Par Can Right</div>
+                <div class="fixture-count-link">Edit fixtures ›</div>
+              </div>
+            </div>
+
+            <!-- Booth -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch" style="background:rgba(255,60,172,0.2)"></div>
+                <div class="zone-card-title">
+                  <div class="zone-card-name">Booth</div>
+                  <div class="zone-card-sub">1 fixture · Bounce mode</div>
+                </div>
+                <div class="zone-toggle"></div>
+              </div>
+              <div class="zone-card-body">
+                <div class="palette-label">Color Palette</div>
+                <div class="palette-row">
+                  <div class="palette-dot selected" style="background:#ff3cac"></div>
+                  <div class="palette-dot" style="background:#ff8c42"></div>
+                  <div class="palette-dot" style="background:#fff;border:2px solid rgba(255,255,255,0.2)"></div>
+                  <div class="palette-dot add">+</div>
+                </div>
+                <div class="palette-label">Energy</div>
+                <div class="energy-row">
+                  <div class="energy-label-text">Low</div>
+                  <div class="slider-track">
+                    <div class="slider-fill" style="width:55%;background:#ff3cac"></div>
+                    <div class="slider-thumb" style="left:calc(55% - 8px)"></div>
+                  </div>
+                  <div class="energy-value">55%</div>
+                </div>
+                <div class="palette-label">Mode</div>
+                <div class="mode-chip-row">
+                  <div class="mode-chip">Chill</div>
+                  <div class="mode-chip active">Bounce</div>
+                  <div class="mode-chip">Hype</div>
+                  <div class="mode-chip">Drop</div>
+                </div>
+              </div>
+              <div class="fixture-count-row">
+                <div class="fixture-count-text">Booth Wash</div>
+                <div class="fixture-count-link">Edit fixtures ›</div>
+              </div>
+            </div>
+
+            <!-- Chill Area -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch" style="background:rgba(0,229,160,0.15)"></div>
+                <div class="zone-card-title">
+                  <div class="zone-card-name">Chill Area</div>
+                  <div class="zone-card-sub">1 fixture · Chill mode</div>
+                </div>
+                <div class="zone-toggle off"></div>
+              </div>
+              <div class="zone-card-body">
+                <div class="palette-label">Color Palette</div>
+                <div class="palette-row">
+                  <div class="palette-dot selected" style="background:#00e5a0"></div>
+                  <div class="palette-dot" style="background:#00b8d9"></div>
+                  <div class="palette-dot" style="background:#7b5cff"></div>
+                  <div class="palette-dot add">+</div>
+                </div>
+                <div class="palette-label">Energy</div>
+                <div class="energy-row">
+                  <div class="energy-label-text">Low</div>
+                  <div class="slider-track">
+                    <div class="slider-fill" style="width:28%;background:#00e5a0"></div>
+                    <div class="slider-thumb" style="left:calc(28% - 8px)"></div>
+                  </div>
+                  <div class="energy-value">28%</div>
+                </div>
+                <div class="palette-label">Mode</div>
+                <div class="mode-chip-row">
+                  <div class="mode-chip active">Chill</div>
+                  <div class="mode-chip">Bounce</div>
+                  <div class="mode-chip">Hype</div>
+                  <div class="mode-chip">Drop</div>
+                </div>
+              </div>
+              <div class="fixture-count-row">
+                <div class="fixture-count-text">Bar Strip</div>
+                <div class="fixture-count-link">Edit fixtures ›</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="add-zone-row">+ Add Zone</div>
+
+        </div>
+      </div>
+
+      <!-- Annotations -->
+      <div class="annotation-panel">
+        <h3>Design Notes</h3>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">1</div>
+          <div class="annotation-text">
+            <strong>Zone Cards</strong>
+            <p>One card per zone. Collapsed by default in live performance — expanded here for setup. Toggle switch kills all fixtures in a zone without deleting it.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot">2</div>
+          <div class="annotation-text">
+            <strong>Color Palette</strong>
+            <p>Dots represent colors this zone will cycle through. Selected dot (white ring) is active. Tap + to open color picker. Palette drives the Color Engine on the performance screen.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot pink">3</div>
+          <div class="annotation-text">
+            <strong>Energy Slider</strong>
+            <p>Controls overall intensity — flash rate, brightness, movement speed. Not a dimmer. 0% = static ambient. 100% = maximum reactive behavior.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot orange">4</div>
+          <div class="annotation-text">
+            <strong>Per-Zone Mode</strong>
+            <p>Each zone runs its own mode independently. Dance Floor can be Hype while Chill Area stays in Chill — no global override needed.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">5</div>
+          <div class="annotation-text">
+            <strong>Zone Toggle (off state)</strong>
+            <p>Chill Area is toggled off — zone card goes muted. Useful mid-set when an area closes. Re-enable with one tap.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>
