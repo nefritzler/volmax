@@ -374,36 +374,6 @@
 /* FX pad active & pressing states */
 .fx-pad.active { background: rgba(60,120,255,0.22); border-color: rgba(60,120,255,0.9); box-shadow: 0 0 10px rgba(60,120,255,0.45); }
 .fx-pad.pressing        { transform: scale(0.94); opacity: 0.8; transition: transform 0.05s; }
-
-/* Zone slider cursor */
-.zone-level-bar { cursor: ew-resize; }
-
-/* ── Zone Bars ─── */
-.zone-bars {
-  padding: 0 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.zone-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 7px 10px;
-}
-
-.zone-color { width: 10px; height: 10px; border-radius: 50%; }
-.zone-name  { font-size: 11px; font-weight: 600; color: var(--text); flex: 1; }
-.zone-level-bar {
-  width: 72px; height: 4px;
-  background: var(--border);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.zone-fill { height: 100%; border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -548,26 +518,6 @@
             </div>
           </div>
 
-          <!-- ── Zones ── -->
-          <div class="section-label">Zones</div>
-          <div class="zone-bars">
-            <div class="zone-bar">
-              <div class="zone-color" style="background:#7b5cff"></div>
-              <div class="zone-name">Dance Floor</div>
-              <div class="zone-level-bar" id="zone-bar-0" onmousedown="startZoneDrag(event,0)"><div class="zone-fill" id="zone-fill-0" style="width:90%;background:#7b5cff"></div></div>
-            </div>
-            <div class="zone-bar">
-              <div class="zone-color" style="background:#ff3cac"></div>
-              <div class="zone-name">Booth</div>
-              <div class="zone-level-bar" id="zone-bar-1" onmousedown="startZoneDrag(event,1)"><div class="zone-fill" id="zone-fill-1" style="width:60%;background:#ff3cac"></div></div>
-            </div>
-            <div class="zone-bar">
-              <div class="zone-color" style="background:#00e5a0"></div>
-              <div class="zone-name">Chill Area</div>
-              <div class="zone-level-bar" id="zone-bar-2" onmousedown="startZoneDrag(event,2)"><div class="zone-fill" id="zone-fill-2" style="width:30%;background:#00e5a0"></div></div>
-            </div>
-          </div>
-
         </div><!-- /phone-screen -->
       </div><!-- /phone-frame -->
 
@@ -689,35 +639,6 @@ function toggleFx(pad) {
   document.addEventListener('mouseup', function() { isDragging = false; });
 })();
 
-// ── Zone Level Sliders ──────────────────────────────────────────
-(function() {
-  var activeZone = null;
-
-  function setZoneLevel(idx, e) {
-    var bar = document.getElementById('zone-bar-' + idx);
-    var fill = document.getElementById('zone-fill-' + idx);
-    var rect = bar.getBoundingClientRect();
-    var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-    fill.style.width = (pct * 100) + '%';
-  }
-
-  for (var i = 0; i < 3; i++) {
-    (function(idx) {
-      document.getElementById('zone-bar-' + idx).addEventListener('mousedown', function(e) {
-        activeZone = idx;
-        setZoneLevel(idx, e);
-        e.preventDefault();
-      });
-    })(i);
-  }
-
-  document.addEventListener('mousemove', function(e) {
-    if (activeZone === null) return;
-    setZoneLevel(activeZone, e);
-  });
-
-  document.addEventListener('mouseup', function() { activeZone = null; });
-})();
 </script>
 </body>
 </html>
