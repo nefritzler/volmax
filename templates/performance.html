@@ -129,23 +129,6 @@
   margin-bottom: 8px;
 }
 
-.waveform {
-  height: 30px;
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-
-.wbar {
-  flex: 1;
-  border-radius: 2px;
-  background: var(--accent);
-  opacity: 0.35;
-}
-.wbar.played { opacity: 0.85; }
-
 /* ── Progress Bar ─── */
 .perf-progress {
   display: flex;
@@ -460,32 +443,6 @@
             </div>
             <div class="track-title">Come Alive</div>
             <div class="track-artist">DJ Snake · Energy: High</div>
-            <div class="waveform">
-              <div class="wbar played" style="height:40%"></div>
-              <div class="wbar played" style="height:60%"></div>
-              <div class="wbar played" style="height:80%"></div>
-              <div class="wbar played" style="height:55%"></div>
-              <div class="wbar played" style="height:90%"></div>
-              <div class="wbar played" style="height:70%"></div>
-              <div class="wbar played" style="height:45%"></div>
-              <div class="wbar played" style="height:100%"></div>
-              <div class="wbar played" style="height:85%"></div>
-              <div class="wbar played" style="height:65%"></div>
-              <div class="wbar played" style="height:50%"></div>
-              <div class="wbar" style="height:75%"></div>
-              <div class="wbar" style="height:90%"></div>
-              <div class="wbar" style="height:60%"></div>
-              <div class="wbar" style="height:80%"></div>
-              <div class="wbar" style="height:40%"></div>
-              <div class="wbar" style="height:70%"></div>
-              <div class="wbar" style="height:55%"></div>
-              <div class="wbar" style="height:85%"></div>
-              <div class="wbar" style="height:65%"></div>
-              <div class="wbar" style="height:95%"></div>
-              <div class="wbar" style="height:50%"></div>
-              <div class="wbar" style="height:70%"></div>
-              <div class="wbar" style="height:45%"></div>
-            </div>
             <!-- Progress / time remaining -->
             <div class="perf-progress">
               <span class="perf-time">3:28</span>
@@ -497,13 +454,11 @@
             </div>
             <!-- Section color map — active section highlighted -->
             <div class="perf-color-map">
-              <div class="pcm-seg" style="width:12%;background:rgba(123,92,255,0.5)"></div>
-              <div class="pcm-seg" style="width:20%;background:rgba(123,92,255,0.75)"></div>
-              <div class="pcm-seg" style="width:10%;background:rgba(255,60,172,0.5)"></div>
-              <div class="pcm-seg pcm-active" style="width:18%;background:rgba(255,60,172,1)"><div class="pcm-label">Drop 1</div></div>
-              <div class="pcm-seg" style="width:10%;background:rgba(123,92,255,0.45)"></div>
-              <div class="pcm-seg" style="width:20%;background:rgba(255,140,66,0.85)"></div>
-              <div class="pcm-seg" style="width:10%;background:rgba(0,229,160,0.55)"></div>
+              <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
+              <div class="pcm-seg" style="width:25%;background:#ffaa00"></div>
+              <div class="pcm-seg pcm-active" style="width:25%;background:#ff0044"><div class="pcm-label">Drop 1</div></div>
+              <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
+              <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
             </div>
             <!-- Mode Selection -->
             <div class="mode-row-label">Mode</div>
@@ -525,32 +480,6 @@
             </div>
             <div class="track-title">Titanium (DJ Edit)</div>
             <div class="track-artist">David Guetta · Energy: Medium</div>
-            <div class="waveform">
-              <div class="wbar" style="height:50%"></div>
-              <div class="wbar" style="height:70%"></div>
-              <div class="wbar" style="height:90%"></div>
-              <div class="wbar" style="height:60%"></div>
-              <div class="wbar" style="height:80%"></div>
-              <div class="wbar" style="height:45%"></div>
-              <div class="wbar" style="height:100%"></div>
-              <div class="wbar" style="height:75%"></div>
-              <div class="wbar" style="height:55%"></div>
-              <div class="wbar" style="height:85%"></div>
-              <div class="wbar" style="height:65%"></div>
-              <div class="wbar" style="height:40%"></div>
-              <div class="wbar" style="height:70%"></div>
-              <div class="wbar" style="height:90%"></div>
-              <div class="wbar" style="height:55%"></div>
-              <div class="wbar" style="height:80%"></div>
-              <div class="wbar" style="height:60%"></div>
-              <div class="wbar" style="height:95%"></div>
-              <div class="wbar" style="height:50%"></div>
-              <div class="wbar" style="height:75%"></div>
-              <div class="wbar" style="height:85%"></div>
-              <div class="wbar" style="height:45%"></div>
-              <div class="wbar" style="height:65%"></div>
-              <div class="wbar" style="height:70%"></div>
-            </div>
             <div class="perf-progress">
               <span class="perf-time">0:00</span>
               <div class="perf-scrub-track">
@@ -560,12 +489,10 @@
               <span class="perf-time remaining" style="color:var(--orange)">-5:42</span>
             </div>
             <div class="perf-color-map">
-              <div class="pcm-seg" style="width:15%;background:rgba(123,92,255,0.5)"></div>
-              <div class="pcm-seg" style="width:25%;background:rgba(123,92,255,0.8)"></div>
-              <div class="pcm-seg" style="width:12%;background:rgba(255,60,172,0.6)"></div>
-              <div class="pcm-seg" style="width:20%;background:rgba(255,60,172,1)"></div>
-              <div class="pcm-seg" style="width:10%;background:rgba(123,92,255,0.5)"></div>
-              <div class="pcm-seg" style="width:18%;background:rgba(255,140,66,0.9)"></div>
+              <div class="pcm-seg" style="width:20%;background:#0044ff"></div>
+              <div class="pcm-seg" style="width:30%;background:#ffaa00"></div>
+              <div class="pcm-seg" style="width:30%;background:#ff00cc"></div>
+              <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
             </div>
             <!-- Mode Selection -->
             <div class="mode-row-label">Mode</div>
