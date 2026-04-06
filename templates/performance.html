@@ -129,12 +129,11 @@
   margin-bottom: 8px;
 }
 
-/* ── Progress Bar ─── */
-.perf-progress {
+/* ── Merged Progress + Color Map ─── */
+.merged-time-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  justify-content: space-between;
+  margin-bottom: 3px;
 }
 .perf-time {
   font-size: 10px;
@@ -144,37 +143,41 @@
   flex-shrink: 0;
 }
 .perf-time.remaining { color: var(--accent); }
-.perf-scrub-track {
-  flex: 1;
-  height: 3px;
-  background: var(--border);
-  border-radius: 2px;
+.pcm-merged-wrap {
   position: relative;
+  margin-bottom: 6px;
 }
-.perf-scrub-fill {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 61%;
-  background: var(--accent);
-  border-radius: 2px;
-}
-.perf-scrub-head {
-  position: absolute;
-  top: 50%; left: 61%;
-  transform: translate(-50%, -50%);
-  width: 10px; height: 10px;
-  background: #fff;
-  border-radius: 50%;
-  box-shadow: 0 0 0 2px var(--accent);
-}
-
-/* ── Color Map Strip ─── */
-.perf-color-map {
+.pcm-merged-map {
   display: flex;
-  height: 14px;
+  height: 22px;
   border-radius: 6px;
   overflow: hidden;
-  margin-bottom: 10px;
+  gap: 1px;
+}
+.pcm-unplayed-dim {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  left: 61%;
+  background: rgba(0,0,8,0.54);
+  pointer-events: none;
+  border-radius: 0 6px 6px 0;
+}
+.pcm-playhead-line {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 61%;
+  width: 2px;
+  transform: translateX(-50%);
+  background: #fff;
+  box-shadow: 0 0 6px rgba(255,255,255,0.9);
+}
+
+/* ── Color Map Strip (legacy ref for pcm-seg shared styles) ─── */
+.pcm-merged-map, .perf-color-map {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  gap: 1px;
 }
 .pcm-seg {
   height: 100%;
@@ -440,22 +443,20 @@
                 <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
               </div>
             </div>
-            <!-- Progress / time remaining -->
-            <div class="perf-progress">
+            <div class="merged-time-row">
               <span class="perf-time">3:28</span>
-              <div class="perf-scrub-track">
-                <div class="perf-scrub-fill"></div>
-                <div class="perf-scrub-head"></div>
-              </div>
               <span class="perf-time remaining">-2:14</span>
             </div>
-            <!-- Section color map — active section highlighted -->
-            <div class="perf-color-map">
-              <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
-              <div class="pcm-seg" style="width:25%;background:#ffaa00"></div>
-              <div class="pcm-seg pcm-active" style="width:25%;background:#ff0044"><div class="pcm-label">Drop 1</div></div>
-              <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
-              <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
+            <div class="pcm-merged-wrap">
+              <div class="pcm-merged-map">
+                <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
+                <div class="pcm-seg" style="width:25%;background:#ffaa00"></div>
+                <div class="pcm-seg" style="width:25%;background:#ff0044"><div class="pcm-label">Drop 1</div></div>
+                <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
+                <div class="pcm-seg" style="width:15%;background:#0044ff"></div>
+              </div>
+              <div class="pcm-unplayed-dim"></div>
+              <div class="pcm-playhead-line"></div>
             </div>
           </div>
 
@@ -479,19 +480,19 @@
                 <div class="mode-btn" onclick="selectMode(this)"><div class="mode-name">Drop</div></div>
               </div>
             </div>
-            <div class="perf-progress">
+            <div class="merged-time-row">
               <span class="perf-time">0:00</span>
-              <div class="perf-scrub-track">
-                <div class="perf-scrub-fill" style="width:0%"></div>
-                <div class="perf-scrub-head" style="left:0%"></div>
-              </div>
               <span class="perf-time remaining" style="color:var(--orange)">-5:42</span>
             </div>
-            <div class="perf-color-map">
-              <div class="pcm-seg" style="width:20%;background:#0044ff"></div>
-              <div class="pcm-seg" style="width:30%;background:#ffaa00"></div>
-              <div class="pcm-seg" style="width:30%;background:#ff00cc"></div>
-              <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
+            <div class="pcm-merged-wrap">
+              <div class="pcm-merged-map">
+                <div class="pcm-seg" style="width:20%;background:#0044ff"></div>
+                <div class="pcm-seg" style="width:30%;background:#ffaa00"></div>
+                <div class="pcm-seg" style="width:30%;background:#ff00cc"></div>
+                <div class="pcm-seg" style="width:20%;background:#00ccff"></div>
+              </div>
+              <div class="pcm-unplayed-dim" style="left:0%"></div>
+              <div class="pcm-playhead-line" style="left:0%"></div>
             </div>
           </div>
 
