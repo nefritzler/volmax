@@ -355,12 +355,59 @@
   letter-spacing: 0.06em;
 }
 
+/* ── Beat Loop Selector ─── */
+.beat-loop-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.beat-loop-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.beat-loop-btn {
+  width: 20px; height: 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(123,92,255,0.45);
+  background: rgba(123,92,255,0.12);
+  color: #a78bfa;
+  font-size: 11px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.beat-loop-btn:active { background: rgba(123,92,255,0.3); }
+
+.beat-loop-val {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 22px;
+  text-align: center;
+  line-height: 1;
+}
+
 /* ── FX Pad Grid ─── */
 .fx-grid {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 5px;
+}
+
+/* Beat-loop pads (row 1: Strobe, Flash, Chase) get a subtle tinted border */
+.fx-pad.beat-pad {
+  border-color: rgba(123,92,255,0.28);
 }
 
 .fx-pad {
@@ -735,7 +782,7 @@ input[type=range].master-fader::-moz-range-thumb {
           <!-- ── Effects Panel ── -->
           <div class="section-label">Effects</div>
           <div class="fx-panel">
-            <!-- Intensity Knob -->
+            <!-- Intensity Knob + Beat Loop -->
             <div class="knob-wrap">
               <div class="intensity-knob">
                 <div class="knob-arc-track"></div>
@@ -743,13 +790,22 @@ input[type=range].master-fader::-moz-range-thumb {
               </div>
               <div class="knob-value">70%</div>
               <div class="knob-label">Intensity</div>
+              <!-- Beat Loop selector -->
+              <div class="beat-loop-wrap">
+                <div class="beat-loop-row">
+                  <div class="beat-loop-btn" onclick="beatLoopStep(-1)">&#9665;</div>
+                  <div class="beat-loop-val" id="beat-loop-val">1</div>
+                  <div class="beat-loop-btn" onclick="beatLoopStep(1)">&#9655;</div>
+                </div>
+                <div class="knob-label">Beat Loop</div>
+              </div>
             </div>
-            <!-- FX Pads -->
+            <!-- FX Pads: row 1 = beat-loop pads (Strobe, Flash, Chase), row 2 = free pads -->
             <div class="fx-grid">
-              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Flash</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Color Wash</div></div>
-              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
-              <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Flash</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Rainbow</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Fade</div></div>
             </div>
@@ -959,6 +1015,19 @@ function toggleBlackout() {
     muteBtn.textContent = active ? 'Muted' : 'Mute';
   });
 }
+
+// ── Beat Loop Selector ───────────────────────────────────────────
+(function() {
+  var DIVISIONS = ['1/8', '1/4', '1/2', '1', '2', '4'];
+  var idx = 3; // default: 1 beat
+  var label = document.getElementById('beat-loop-val');
+  label.textContent = DIVISIONS[idx];
+
+  window.beatLoopStep = function(dir) {
+    idx = Math.max(0, Math.min(DIVISIONS.length - 1, idx + dir));
+    label.textContent = DIVISIONS[idx];
+  };
+})();
 
 // ── FX Pads ─────────────────────────────────────────────────────
 function toggleFx(pad) {
