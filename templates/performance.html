@@ -289,17 +289,70 @@
   align-items: flex-start;
 }
 
-/* ── Intensity Knob ─── */
+/* ── FX Left Column ─── */
 .knob-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   flex-shrink: 0;
 }
 
+/* ── Beat Loop Selector ─── */
+.beat-loop-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 50px;
+}
+
+.beat-loop-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.beat-loop-btn {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  border: 1px solid rgba(123,92,255,0.45);
+  background: rgba(123,92,255,0.12);
+  color: #a78bfa;
+  font-size: 13px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.beat-loop-btn:active { background: rgba(123,92,255,0.3); }
+
+.beat-loop-val {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--accent);
+  min-width: 28px;
+  text-align: center;
+  line-height: 1;
+}
+
+/* ── Intensity Knob ─── */
+.intensity-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 50px;
+}
+
 .intensity-knob {
-  width: 52px; height: 52px;
+  width: 34px; height: 34px;
   border-radius: 50%;
   background: radial-gradient(circle at 38% 34%, #3c3c52, #18181e);
   border: 2px solid rgba(123,92,255,0.35);
@@ -313,7 +366,7 @@
 
 .knob-arc-track {
   position: absolute;
-  inset: -5px;
+  inset: -4px;
   border-radius: 50%;
   background: conic-gradient(
     from -135deg,
@@ -330,21 +383,18 @@
 .knob-tick {
   position: absolute;
   width: 2px;
-  height: 14px;
+  height: 10px;
   border-radius: 1px;
   background: #fff;
-  top: 8px;
+  top: 4px;
   left: 50%;
-  transform-origin: 50% 18px;
+  transform-origin: 50% 13px;
   transform: translateX(-50%) rotate(54deg);
   box-shadow: 0 0 5px rgba(123,92,255,0.9);
 }
 
 .knob-value {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
+  display: none;
 }
 
 .knob-label {
@@ -353,48 +403,6 @@
   color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-}
-
-/* ── Beat Loop Selector ─── */
-.beat-loop-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-  margin-top: 4px;
-}
-
-.beat-loop-row {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.beat-loop-btn {
-  width: 20px; height: 20px;
-  border-radius: 5px;
-  border: 1px solid rgba(123,92,255,0.45);
-  background: rgba(123,92,255,0.12);
-  color: #a78bfa;
-  font-size: 11px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  -webkit-user-select: none;
-  user-select: none;
-}
-.beat-loop-btn:active { background: rgba(123,92,255,0.3); }
-
-.beat-loop-val {
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--accent);
-  min-width: 22px;
-  text-align: center;
-  line-height: 1;
 }
 
 /* ── FX Pad Grid ─── */
@@ -782,14 +790,8 @@ input[type=range].master-fader::-moz-range-thumb {
           <!-- ── Effects Panel ── -->
           <div class="section-label">Effects</div>
           <div class="fx-panel">
-            <!-- Intensity Knob + Beat Loop -->
+            <!-- Beat Loop + Intensity Knob -->
             <div class="knob-wrap">
-              <div class="intensity-knob">
-                <div class="knob-arc-track"></div>
-                <div class="knob-tick"></div>
-              </div>
-              <div class="knob-value">70%</div>
-              <div class="knob-label">Intensity</div>
               <!-- Beat Loop selector -->
               <div class="beat-loop-wrap">
                 <div class="beat-loop-row">
@@ -798,6 +800,14 @@ input[type=range].master-fader::-moz-range-thumb {
                   <div class="beat-loop-btn" onclick="beatLoopStep(1)">&#9655;</div>
                 </div>
                 <div class="knob-label">Beat Loop</div>
+              </div>
+              <div class="intensity-wrap">
+                <div class="intensity-knob">
+                  <div class="knob-arc-track"></div>
+                  <div class="knob-tick"></div>
+                </div>
+                <div class="knob-value">70%</div>
+                <div class="knob-label">Intensity</div>
               </div>
             </div>
             <!-- FX Pads: row 1 = beat-loop pads (Strobe, Flash, Chase), row 2 = free pads -->
