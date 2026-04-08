@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLMAX — Configure</title>
+<link rel="stylesheet" href="/static/css/base.css">
+<style>
+
+/* ── Section ─── */
+.cfg-section {
+  border-bottom: 1px solid var(--border);
+}
+
+.cfg-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+}
+
+.cfg-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+/* ── Discovery Header ─── */
+.discovery-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.cfg-page-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.scan-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+/* ── Scan status ─── */
+.scan-status {
+  margin: 8px 16px;
+  background: rgba(0,229,160,0.07);
+  border: 1px solid rgba(0,229,160,0.2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.scan-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid rgba(0,229,160,0.25);
+  border-top-color: var(--green);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { to { opacity: 0.35; } }
+
+.scan-text {
+  font-size: 11px;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ── Fixture Rows ─── */
+.fixture-list {
+  padding: 0 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.fixture-row {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fixture-icon {
+  font-size: 17px;
+  width: 26px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.fixture-info { flex: 1; min-width: 0; }
+
+.fixture-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixture-meta {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  display: inline-block;
+  flex-shrink: 0;
+}
+.status-dot.offline { background: var(--text-muted); }
+
+.zone-chip {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.zone-chip.z1  { background: rgba(123,92,255,0.2);  color: #7b5cff; border: 1px solid rgba(123,92,255,0.35); }
+.zone-chip.z2  { background: rgba(255,60,172,0.2);  color: #ff3cac; border: 1px solid rgba(255,60,172,0.35); }
+.zone-chip.z3  { background: rgba(0,229,160,0.15);  color: #00e5a0; border: 1px solid rgba(0,229,160,0.3);  }
+.zone-chip.z4  { background: rgba(255,140,66,0.15); color: #ff8c42; border: 1px solid rgba(255,140,66,0.3); }
+.zone-chip.none { background: var(--surface); color: var(--text-dim); border: 1px solid var(--border); }
+
+/* ── Floor Grid ─── */
+.grid-wrap {
+  padding: 10px 16px 14px;
+}
+
+.grid-label-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  padding: 0 2px;
+}
+
+.grid-axis-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.floor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 5px;
+  aspect-ratio: 1;
+  width: 100%;
+}
+
+.grid-cell {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 56px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.grid-cell:hover {
+  border-color: var(--text-muted);
+}
+
+.grid-cell.occupied {
+  border-width: 1.5px;
+}
+
+.grid-cell.occupied.z1 { background: rgba(123,92,255,0.12); border-color: rgba(123,92,255,0.45); }
+.grid-cell.occupied.z2 { background: rgba(255,60,172,0.12); border-color: rgba(255,60,172,0.45); }
+.grid-cell.occupied.z3 { background: rgba(0,229,160,0.10); border-color: rgba(0,229,160,0.4);  }
+.grid-cell.occupied.z4 { background: rgba(255,140,66,0.10); border-color: rgba(255,140,66,0.4); }
+.grid-cell.occupied.unassigned { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); border-style: dashed; }
+
+.grid-fixture-icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+.grid-fixture-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 0 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.grid-cell.occupied.z1 .grid-fixture-label { color: #a08cff; }
+.grid-cell.occupied.z2 .grid-fixture-label { color: #ff7acc; }
+.grid-cell.occupied.z3 .grid-fixture-label { color: #00e5a0; }
+.grid-cell.occupied.z4 .grid-fixture-label { color: #ffaa66; }
+
+.grid-empty-hint {
+  font-size: 9px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.grid-legend {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.grid-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Zone Cards ─── */
+.zone-list {
+  padding: 10px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.zone-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.zone-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 8px;
+}
+
+.zone-swatch {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.zone-swatch.z1 { background: rgba(123,92,255,0.25); }
+.zone-swatch.z2 { background: rgba(255,60,172,0.25); }
+.zone-swatch.z3 { background: rgba(0,229,160,0.2);  }
+.zone-swatch.z4 { background: rgba(255,140,66,0.2); }
+
+.zone-name-wrap { flex: 1; min-width: 0; }
+
+.zone-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  cursor: text;
+  border-bottom: 1px solid transparent;
+  display: inline-block;
+  transition: border-color 0.15s;
+}
+
+.zone-name:hover { border-bottom-color: var(--text-muted); }
+
+.zone-name.editing {
+  outline: none;
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.zone-fixture-count {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-top: 1px;
+}
+
+.idle-color-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px 8px;
+}
+
+.idle-label {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.1s;
+}
+
+.color-swatch:hover { transform: scale(1.15); }
+.color-swatch.selected { border-color: #fff; }
+
+.zone-fixtures-section {
+  border-top: 1px solid var(--border);
+  padding: 7px 12px 8px;
+}
+
+.zone-fixtures-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+}
+
+.zone-fixture-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.fixture-chip {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.fixture-chip-remove {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1;
+}
+
+/* ── Add Zone Row ─── */
+.add-zone-row {
+  border: 1.5px dashed var(--border);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.add-zone-row:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.add-zone-plus {
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* ── Bottom Bar ─── */
+.bottom-bar {
+  position: sticky;
+  bottom: 0;
+  padding: 10px 16px 24px;
+  background: linear-gradient(to bottom, transparent, var(--bg) 40%);
+}
+
+.save-btn {
+  display: block;
+  width: 100%;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 14px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+
+</style>
+</head>
+<body>
+<div class="preview-shell">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="wordmark">VOL<span>MAX</span></div>
+      <div class="sub">Design Preview</div>
+    </div>
+    <div class="nav-section">
+      <div class="nav-label">Screens</div>
+      <a href="/" class="nav-link">Overview</a>
+      <a href="/performance" class="nav-link">Live</a>
+      <a href="/configure" class="nav-link active">Configure</a>
+      <a href="/timeline" class="nav-link">Tracks</a>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <div class="page-header">
+      <div class="screen-label">Screen 3 · Setup Flow</div>
+      <h1>Configure</h1>
+      <p>Discover fixtures on the network, place them spatially on the floor grid, then organize them into named zones with optional idle colors.</p>
+    </div>
+
+    <div class="phone-frame-wrap">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+
+          <!-- ── Discovery ─── -->
+          <div class="cfg-section">
+            <div class="discovery-header">
+              <div class="cfg-page-title">Configure</div>
+              <div class="scan-btn">Scan</div>
+            </div>
+
+            <div class="cfg-section-header" style="padding-bottom:4px">
+              <div class="cfg-section-title">Fixture Discovery</div>
+              <div style="font-size:10px;color:var(--text-dim);font-weight:600;">5 found</div>
+            </div>
+
+            <div class="scan-status">
+              <div class="scan-spinner"></div>
+              <div class="scan-text">Scanning 192.168.1.x…</div>
+            </div>
+
+            <div class="fixture-list">
+
+              <div class="fixture-row">
+                <div class="fixture-icon">&#9675;</div>
+                <div class="fixture-info">
+                  <div class="fixture-name">Par Can Left</div>
+                  <div class="fixture-meta"><span class="status-dot"></span>Online · 192.168.1.42</div>
+                </div>
+                <div class="zone-chip z1">Dance Floor</div>
+              </div>
+
+              <div class="fixture-row">
+                <div class="fixture-icon">&#9675;</div>
+                <div class="fixture-info">
+                  <div class="fixture-name">Par Can Right</div>
+                  <div class="fixture-meta"><span class="status-dot"></span>Online · 192.168.1.43</div>
+                </div>
+                <div class="zone-chip z1">Dance Floor</div>
+              </div>
+
+              <div class="fixture-row">
+                <div class="fixture-icon">&#9675;</div>
+                <div class="fixture-info">
+                  <div class="fixture-name">Booth Wash</div>
+                  <div class="fixture-meta"><span class="status-dot"></span>Online · 192.168.1.51</div>
+                </div>
+                <div class="zone-chip z2">Booth</div>
+              </div>
+
+              <div class="fixture-row">
+                <div class="fixture-icon">&#9675;</div>
+                <div class="fixture-info">
+                  <div class="fixture-name">Bar Strip</div>
+                  <div class="fixture-meta"><span class="status-dot"></span>Online · 192.168.1.60</div>
+                </div>
+                <div class="zone-chip z3">Chill Area</div>
+              </div>
+
+              <div class="fixture-row">
+                <div class="fixture-icon">&#9675;</div>
+                <div class="fixture-info">
+                  <div class="fixture-name" style="color:var(--text-dim)">VOLMAX-SPOT-2B1C</div>
+                  <div class="fixture-meta"><span class="status-dot offline"></span>Offline · last seen 3h ago</div>
+                </div>
+                <div class="zone-chip z1">Dance Floor</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ── Floor Grid ─── -->
+          <div class="cfg-section">
+            <div class="cfg-section-header">
+              <div class="cfg-section-title">Floor Grid</div>
+              <div style="font-size:9px;color:var(--text-muted);font-weight:600;letter-spacing:0.05em;">DRAG TO PLACE</div>
+            </div>
+
+            <div class="grid-wrap">
+              <div class="grid-label-row">
+                <span class="grid-axis-label">Stage</span>
+                <span class="grid-axis-label">Bar ›</span>
+              </div>
+
+              <div class="floor-grid">
+
+                <!-- Row 0 — stage end -->
+                <div class="grid-cell occupied z1">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Par L</div>
+                </div>
+                <div class="grid-cell occupied z2">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Booth W</div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell occupied z1">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Par R</div>
+                </div>
+
+                <!-- Row 1 -->
+                <div class="grid-cell"></div>
+                <div class="grid-cell occupied unassigned">
+                  <div class="grid-fixture-icon" style="opacity:0.4">&#9675;</div>
+                  <div class="grid-fixture-label" style="color:var(--text-muted)">PAR-7F3A</div>
+                </div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+
+                <!-- Row 2 -->
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+                <div class="grid-cell"></div>
+
+                <!-- Row 3 — bar end -->
+                <div class="grid-cell occupied z3">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Bar Strip</div>
+                </div>
+                <div class="grid-cell occupied z4">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Stage L</div>
+                </div>
+                <div class="grid-cell occupied z4">
+                  <div class="grid-fixture-icon">&#9675;</div>
+                  <div class="grid-fixture-label">Stage R</div>
+                </div>
+                <div class="grid-cell"></div>
+
+              </div>
+
+              <div class="grid-legend">
+                <div class="grid-legend-item">
+                  <div class="legend-dot" style="background:#7b5cff"></div>
+                  Dance Floor
+                </div>
+                <div class="grid-legend-item">
+                  <div class="legend-dot" style="background:#ff3cac"></div>
+                  Booth
+                </div>
+                <div class="grid-legend-item">
+                  <div class="legend-dot" style="background:#00e5a0"></div>
+                  Chill Area
+                </div>
+                <div class="grid-legend-item">
+                  <div class="legend-dot" style="background:#ff8c42"></div>
+                  Stage
+                </div>
+                <div class="grid-legend-item">
+                  <div class="legend-dot" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.3)"></div>
+                  Unassigned
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── Zone Cards ─── -->
+          <div class="cfg-section-header" style="padding-top:12px">
+            <div class="cfg-section-title">Zones</div>
+            <div class="add-btn" style="width:22px;height:22px;background:var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff;font-weight:300;line-height:1;cursor:pointer;">+</div>
+          </div>
+
+          <div class="zone-list">
+
+            <!-- Zone 1: Dance Floor -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch z1">&#9675;</div>
+                <div class="zone-name-wrap">
+                  <div class="zone-name">Dance Floor</div>
+                  <div class="zone-fixture-count">3 fixtures</div>
+                </div>
+              </div>
+              <div class="idle-color-row">
+                <div class="idle-label">Idle</div>
+                <div class="color-swatch selected" style="background:#7b5cff;"></div>
+                <div class="color-swatch" style="background:#ff3cac;"></div>
+                <div class="color-swatch" style="background:#00e5a0;"></div>
+                <div class="color-swatch" style="background:#ff8c42;"></div>
+                <div class="color-swatch" style="background:#3090ff;"></div>
+                <div class="color-swatch" style="background:#ffffff;opacity:0.6;"></div>
+                <div class="color-swatch" style="background:transparent;border:1px dashed var(--border);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)">✕</div>
+              </div>
+              <div class="zone-fixtures-section">
+                <div class="zone-fixtures-label">Fixtures</div>
+                <div class="zone-fixture-chips">
+                  <div class="fixture-chip">Par Can Left <span class="fixture-chip-remove">×</span></div>
+                  <div class="fixture-chip">Par Can Right <span class="fixture-chip-remove">×</span></div>
+                  <div class="fixture-chip" style="color:var(--text-muted);opacity:0.6">SPOT-2B1C <span class="fixture-chip-remove">×</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zone 2: Booth (name in edit state) -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch z2">&#9675;</div>
+                <div class="zone-name-wrap">
+                  <div class="zone-name editing">Booth_</div>
+                  <div class="zone-fixture-count">1 fixture</div>
+                </div>
+              </div>
+              <div class="idle-color-row">
+                <div class="idle-label">Idle</div>
+                <div class="color-swatch" style="background:#7b5cff;"></div>
+                <div class="color-swatch selected" style="background:#ff3cac;"></div>
+                <div class="color-swatch" style="background:#00e5a0;"></div>
+                <div class="color-swatch" style="background:#ff8c42;"></div>
+                <div class="color-swatch" style="background:#3090ff;"></div>
+                <div class="color-swatch" style="background:#ffffff;opacity:0.6;"></div>
+                <div class="color-swatch" style="background:transparent;border:1px dashed var(--border);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)">✕</div>
+              </div>
+              <div class="zone-fixtures-section">
+                <div class="zone-fixtures-label">Fixtures</div>
+                <div class="zone-fixture-chips">
+                  <div class="fixture-chip">Booth Wash <span class="fixture-chip-remove">×</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zone 3: Chill Area -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch z3">&#9675;</div>
+                <div class="zone-name-wrap">
+                  <div class="zone-name">Chill Area</div>
+                  <div class="zone-fixture-count">1 fixture</div>
+                </div>
+              </div>
+              <div class="idle-color-row">
+                <div class="idle-label">Idle</div>
+                <div class="color-swatch" style="background:#7b5cff;"></div>
+                <div class="color-swatch" style="background:#ff3cac;"></div>
+                <div class="color-swatch selected" style="background:#00e5a0;"></div>
+                <div class="color-swatch" style="background:#ff8c42;"></div>
+                <div class="color-swatch" style="background:#3090ff;"></div>
+                <div class="color-swatch" style="background:#ffffff;opacity:0.6;"></div>
+                <div class="color-swatch" style="background:transparent;border:1px dashed var(--border);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)">✕</div>
+              </div>
+              <div class="zone-fixtures-section">
+                <div class="zone-fixtures-label">Fixtures</div>
+                <div class="zone-fixture-chips">
+                  <div class="fixture-chip">Bar Strip <span class="fixture-chip-remove">×</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Zone 4: Stage -->
+            <div class="zone-card">
+              <div class="zone-card-header">
+                <div class="zone-swatch z4">&#9675;</div>
+                <div class="zone-name-wrap">
+                  <div class="zone-name">Stage</div>
+                  <div class="zone-fixture-count">2 fixtures</div>
+                </div>
+              </div>
+              <div class="idle-color-row">
+                <div class="idle-label">Idle</div>
+                <div class="color-swatch" style="background:#7b5cff;"></div>
+                <div class="color-swatch" style="background:#ff3cac;"></div>
+                <div class="color-swatch" style="background:#00e5a0;"></div>
+                <div class="color-swatch selected" style="background:#ff8c42;"></div>
+                <div class="color-swatch" style="background:#3090ff;"></div>
+                <div class="color-swatch" style="background:#ffffff;opacity:0.6;"></div>
+                <div class="color-swatch" style="background:transparent;border:1px dashed var(--border);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text-muted)">✕</div>
+              </div>
+              <div class="zone-fixtures-section">
+                <div class="zone-fixtures-label">Fixtures</div>
+                <div class="zone-fixture-chips">
+                  <div class="fixture-chip">Stage L <span class="fixture-chip-remove">×</span></div>
+                  <div class="fixture-chip">Stage R <span class="fixture-chip-remove">×</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Zone -->
+            <div class="add-zone-row">
+              <div class="add-zone-plus">+</div>
+              Add Zone
+            </div>
+
+          </div>
+
+          <div class="bottom-bar">
+            <div class="save-btn">Save Configuration</div>
+          </div>
+
+        </div><!-- /phone-screen -->
+      </div><!-- /phone-frame -->
+
+      <!-- Annotations -->
+      <div class="annotation-panel">
+        <h3>Design Notes</h3>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">1</div>
+          <div class="annotation-text">
+            <strong>Fixture Discovery</strong>
+            <p>Auto-scans local Wi-Fi subnet on open. Shows live online/offline status. Tap a zone pill to reassign any fixture to a different zone instantly.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot">2</div>
+          <div class="annotation-text">
+            <strong>Floor Grid</strong>
+            <p>4×4 spatial grid representing the room. Drag fixtures onto cells to set physical position. Grid order drives backend effects — chase sequences fire in spatial order, not discovery order. Color-coded by zone for at-a-glance layout review.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot pink">3</div>
+          <div class="annotation-text">
+            <strong>Grid + Zones in Sync</strong>
+            <p>Reassigning a fixture to a new zone on a grid cell updates the zone card immediately — and vice versa. No two-step reconciliation needed.</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot orange">4</div>
+          <div class="annotation-text">
+            <strong>Inline Zone Rename</strong>
+            <p>Tap a zone name to edit it in place (cursor state shown on Booth card). Each fixture belongs to exactly one zone. Removing a fixture from a zone puts it in the unassigned pool (dashed grid cell).</p>
+          </div>
+        </div>
+
+        <div class="annotation-item">
+          <div class="annotation-dot green">5</div>
+          <div class="annotation-text">
+            <strong>Idle Color</strong>
+            <p>Optional fallback color shown when a zone is not actively performing. The ✕ swatch clears the idle color (zone goes dark when idle). No mode or palette selection on this screen.</p>
+          </div>
+        </div>
+
+      </div><!-- /annotation-panel -->
+    </div><!-- /phone-frame-wrap -->
+  </main>
+</div>
+</body>
+</html>

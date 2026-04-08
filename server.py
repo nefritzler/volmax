@@ -22,6 +22,7 @@ class VolmaxHandler(http.server.SimpleHTTPRequestHandler):
         routes = {
             "/": "templates/index.html",
             "/performance": "templates/performance.html",
+            "/configure": "templates/configure.html",
             "/setup": "templates/fixture_setup.html",
             "/zones": "templates/zones.html",
             "/timeline": "templates/track_timeline.html",
