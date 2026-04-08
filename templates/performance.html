@@ -26,13 +26,9 @@
 .deck-meta-row {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 5px;
+  gap: 5px;
+  margin-bottom: 8px;
   flex-wrap: wrap;
-}
-
-.deck-mode-row {
-  margin-bottom: 5px;
 }
 
 .deck-art-row {
@@ -94,18 +90,19 @@
 
 /* ── Mode Pill ── */
 .mode-pill {
-  padding: 4px 13px;
+  width: 52px;
+  padding: 4px 0;
   border-radius: 20px;
   font-size: 10px;
   font-weight: 700;
   color: #fff;
+  text-align: center;
   cursor: pointer;
   flex-shrink: 0;
   letter-spacing: 0.04em;
   user-select: none;
   -webkit-user-select: none;
   transition: background 0.15s ease;
-  margin-left: auto;
 }
 
 .track-title {
@@ -240,7 +237,6 @@
   margin-bottom: 6px;
 }
 .palette-chip {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -267,19 +263,19 @@
 }
 
 .album-art {
-  width: 56px;
-  height: 56px;
+  width: 168px;
+  height: 168px;
   border-radius: 50%;
   flex-shrink: 0;
   border: 2px solid rgba(255,255,255,0.1);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.6);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.6);
   position: relative;
 }
 
 .album-art::after {
   content: '';
   position: absolute;
-  width: 14px; height: 14px;
+  width: 42px; height: 42px;
   background: var(--bg);
   border-radius: 50%;
   top: 50%; left: 50%;
@@ -737,11 +733,7 @@ input[type=range].master-fader::-moz-range-thumb {
             <div class="deck-meta-row">
               <div class="bpm-badge"><div class="bpm-dot"></div> 128 BPM · Linked</div>
               <div class="deck-badge live">LIVE</div>
-            </div>
-            <div class="deck-mode-row">
               <div class="mode-pill" data-deck="1" data-mode-idx="2" onclick="cycleMode(this)" style="background:#ff8800">Hype</div>
-            </div>
-            <div class="track-palette">
               <div class="palette-chip"><div class="palette-dot" style="background:#0055ff"></div><span class="palette-chip-label">Primary</span></div>
               <div class="palette-chip"><div class="palette-dot" style="background:#8800ff"></div><span class="palette-chip-label">Secondary</span></div>
               <div class="palette-chip"><div class="palette-dot" style="background:#ff2200"></div><span class="palette-chip-label">Accent</span></div>
@@ -778,11 +770,7 @@ input[type=range].master-fader::-moz-range-thumb {
                 <div class="bpm-dot" style="background:var(--orange)"></div> 130 BPM · Cued
               </div>
               <div class="deck-badge cue">CUE</div>
-            </div>
-            <div class="deck-mode-row">
               <div class="mode-pill" data-deck="2" data-mode-idx="0" onclick="cycleMode(this)" style="background:#4488ff">Chill</div>
-            </div>
-            <div class="track-palette">
               <div class="palette-chip"><div class="palette-dot" style="background:#ff5500"></div><span class="palette-chip-label">Primary</span></div>
               <div class="palette-chip"><div class="palette-dot" style="background:#cc0066"></div><span class="palette-chip-label">Secondary</span></div>
               <div class="palette-chip"><div class="palette-dot" style="background:#ffffff"></div><span class="palette-chip-label">Accent</span></div>
