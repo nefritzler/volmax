@@ -920,6 +920,8 @@ input[type=range].master-fader::-moz-range-thumb {
                 <div class="deck-badge live">LIVE</div>
                 <div class="mode-pill" data-deck="1" data-mode-idx="2" onclick="cycleMode(this)" style="background:#ff8800">Hype</div>
               </div>
+              <div class="track-title" id="deck1-track-title" style="text-align:left">Track Name</div>
+              <div class="track-artist" id="deck1-track-artist" style="text-align:left">Artist</div>
               <div class="deck-art-swatches">
                 <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #6a3ccc, #1a0a40)"></div>
                 <div class="deck-knobs-stack">
@@ -960,15 +962,17 @@ input[type=range].master-fader::-moz-range-thumb {
             </div>
 
             <!-- Deck B -->
-            <div class="deck-col" id="deck2">
-              <div class="deck-pill-row">
+            <div class="deck-col" id="deck2" style="text-align:right">
+              <div class="deck-pill-row" style="justify-content:flex-end">
+                <div class="mode-pill" data-deck="2" data-mode-idx="0" onclick="cycleMode(this)" style="background:#4488ff">Chill</div>
+                <div class="deck-badge cue">CUE</div>
                 <div class="bpm-badge" style="background:rgba(255,140,66,0.1);border-color:rgba(255,140,66,0.3);color:var(--orange)">
                   <div class="bpm-dot" style="background:var(--orange)"></div> 130 BPM
                 </div>
-                <div class="deck-badge cue">CUE</div>
-                <div class="mode-pill" data-deck="2" data-mode-idx="0" onclick="cycleMode(this)" style="background:#4488ff">Chill</div>
               </div>
-              <div class="deck-art-swatches">
+              <div class="track-title" id="deck2-track-title" style="text-align:right">Track Name</div>
+              <div class="track-artist" id="deck2-track-artist" style="text-align:right">Artist</div>
+              <div class="deck-art-swatches" style="justify-content:flex-end">
                 <div class="deck-knobs-stack">
                   <div class="deck-knob-item">
                     <div class="deck-knob-label">Primary</div>
@@ -1478,10 +1482,14 @@ document.querySelectorAll('.mini-knob-container[data-deck]').forEach(function(co
   var DECK_A_COLOR = '#0055ff';
   var DECK_B_COLOR = '#ff5500';
 
-  var dot    = document.getElementById('bridge-dot');
-  var label  = document.getElementById('bridge-label');
-  var tintA  = document.getElementById('deck1-blend-tint');
-  var tintB  = document.getElementById('deck2-blend-tint');
+  var dot        = document.getElementById('bridge-dot');
+  var label      = document.getElementById('bridge-label');
+  var tintA      = document.getElementById('deck1-blend-tint');
+  var tintB      = document.getElementById('deck2-blend-tint');
+  var titleA     = document.getElementById('deck1-track-title');
+  var artistA    = document.getElementById('deck1-track-artist');
+  var titleB     = document.getElementById('deck2-track-title');
+  var artistB    = document.getElementById('deck2-track-artist');
 
   var history = [];
   var HIST_WINDOW = 500;
@@ -1558,6 +1566,10 @@ document.querySelectorAll('.mini-knob-container[data-deck]').forEach(function(co
     var db  = typeof msg.deck_b === 'number' ? msg.deck_b : 0;
     var now = msg.timestamp ? msg.timestamp * 1000 : Date.now();
     applyBlend(da, db, detectRate(da, db, now) > 0.5);
+    if (msg.title_a  != null && titleA)  titleA.textContent  = msg.title_a;
+    if (msg.artist_a != null && artistA) artistA.textContent = msg.artist_a;
+    if (msg.title_b  != null && titleB)  titleB.textContent  = msg.title_b;
+    if (msg.artist_b != null && artistB) artistB.textContent = msg.artist_b;
   }
 
   function connect() {
