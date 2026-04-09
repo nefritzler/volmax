@@ -642,7 +642,7 @@
               <div class="zone-card-header">
                 <div class="zone-swatch z1">&#9675;</div>
                 <div class="zone-name-wrap">
-                  <div class="zone-name">Dance Floor</div>
+                  <div class="zone-name" contenteditable="true" data-zone-idx="0">Dance Floor</div>
                   <div class="zone-fixture-count">3 fixtures</div>
                 </div>
               </div>
@@ -671,7 +671,7 @@
               <div class="zone-card-header">
                 <div class="zone-swatch z2">&#9675;</div>
                 <div class="zone-name-wrap">
-                  <div class="zone-name editing">Booth_</div>
+                  <div class="zone-name" contenteditable="true" data-zone-idx="1">Booth</div>
                   <div class="zone-fixture-count">1 fixture</div>
                 </div>
               </div>
@@ -698,7 +698,7 @@
               <div class="zone-card-header">
                 <div class="zone-swatch z3">&#9675;</div>
                 <div class="zone-name-wrap">
-                  <div class="zone-name">Chill Area</div>
+                  <div class="zone-name" contenteditable="true" data-zone-idx="2">Chill Area</div>
                   <div class="zone-fixture-count">1 fixture</div>
                 </div>
               </div>
@@ -725,7 +725,7 @@
               <div class="zone-card-header">
                 <div class="zone-swatch z4">&#9675;</div>
                 <div class="zone-name-wrap">
-                  <div class="zone-name">Stage</div>
+                  <div class="zone-name" contenteditable="true" data-zone-idx="3">Stage</div>
                   <div class="zone-fixture-count">2 fixtures</div>
                 </div>
               </div>
@@ -811,5 +811,41 @@
     </div><!-- /phone-frame-wrap -->
   </main>
 </div>
+<script>
+var STORAGE_KEY = 'volmax_zones';
+var FALLBACK_NAMES = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4'];
+
+function loadZoneNames() {
+  try {
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (Array.isArray(saved)) {
+      saved.forEach(function(name, i) {
+        var el = document.querySelector('[data-zone-idx="' + i + '"]');
+        if (el && name) el.textContent = name;
+      });
+    }
+  } catch(e) {}
+}
+
+function saveZoneNames() {
+  var names = FALLBACK_NAMES.map(function(fallback, i) {
+    var el = document.querySelector('[data-zone-idx="' + i + '"]');
+    return el ? (el.textContent.trim() || fallback) : fallback;
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(names));
+}
+
+document.querySelectorAll('[data-zone-idx]').forEach(function(el) {
+  el.addEventListener('blur', function() {
+    if (!el.textContent.trim()) el.textContent = FALLBACK_NAMES[el.dataset.zoneIdx];
+    saveZoneNames();
+  });
+  el.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); el.blur(); }
+  });
+});
+
+loadZoneNames();
+</script>
 </body>
 </html>

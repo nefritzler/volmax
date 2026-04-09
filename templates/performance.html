@@ -23,28 +23,12 @@
   border-bottom: 1px solid var(--border);
 }
 
-.deck-meta-row {
+.deck-header {
   display: flex;
   align-items: center;
-  gap: 5px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin-bottom: 6px;
   flex-wrap: wrap;
-}
-
-.deck-art-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
-
-.deck-track-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
 }
 
 .bpm-badge {
@@ -90,36 +74,31 @@
 
 /* ── Mode Pill ── */
 .mode-pill {
-  width: 52px;
-  padding: 4px 0;
+  padding: 4px 13px;
   border-radius: 20px;
   font-size: 10px;
   font-weight: 700;
   color: #fff;
-  text-align: center;
   cursor: pointer;
   flex-shrink: 0;
   letter-spacing: 0.04em;
   user-select: none;
   -webkit-user-select: none;
   transition: background 0.15s ease;
+  margin-left: auto;
 }
 
 .track-title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 2px;
 }
 
 .track-artist {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-dim);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 8px;
 }
 
 /* ── Bridge Status Indicator ─── */
@@ -237,6 +216,7 @@
   margin-bottom: 6px;
 }
 .palette-chip {
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 5px;
@@ -262,9 +242,54 @@
   line-height: 1;
 }
 
+/* ── Decks Side-by-Side Section ── */
+.decks-section {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+}
+
+.deck-col {
+  flex: 1;
+  padding: 8px 8px 10px;
+  min-width: 0;
+}
+
+.deck-pill-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.deck-pill-row .bpm-badge {
+  font-size: 9px;
+  padding: 2px 6px;
+  gap: 4px;
+}
+
+.deck-pill-row .mode-pill {
+  font-size: 9px;
+  padding: 2px 8px;
+  margin-left: 0;
+}
+
+.deck-pill-row .deck-badge {
+  font-size: 8px;
+  padding: 2px 5px;
+}
+
+/* Album + swatches row */
+.deck-art-swatches {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .album-art {
-  width: 168px;
-  height: 168px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   flex-shrink: 0;
   border: 2px solid rgba(255,255,255,0.1);
@@ -275,12 +300,118 @@
 .album-art::after {
   content: '';
   position: absolute;
-  width: 42px; height: 42px;
+  width: 18px; height: 18px;
   background: var(--bg);
   border-radius: 50%;
   top: 50%; left: 50%;
   transform: translate(-50%,-50%);
   box-shadow: 0 0 0 1px rgba(255,255,255,0.12);
+}
+
+.deck-swatches-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.swatch-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 3px 5px;
+  cursor: pointer;
+}
+
+.swatch-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255,255,255,0.18);
+}
+
+.swatch-label {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Transition center column */
+.transition-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  width: 58px;
+  padding: 8px 0;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.transition-col-label {
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.transition-pills {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 0 6px;
+}
+
+.transition-pill {
+  font-size: 8px;
+  font-weight: 700;
+  text-align: center;
+  padding: 4px 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text-dim);
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: background 0.12s, border-color 0.12s;
+}
+
+.transition-pill.active {
+  background: rgba(123,92,255,0.22);
+  border-color: rgba(123,92,255,0.7);
+  color: #a78bfa;
+  box-shadow: 0 0 6px rgba(123,92,255,0.3);
+}
+
+/* ── Timelines Section ── */
+.timelines-section {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 10px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.deck-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 /* ── Section Label (shared) ─── */
@@ -301,13 +432,84 @@
   align-items: flex-start;
 }
 
-/* ── FX Left Column ─── */
+/* ── Color Knob ─── */
 .knob-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   flex-shrink: 0;
+}
+
+.color-knob-container {
+  position: relative;
+  width: 84px;
+  height: 84px;
+  flex-shrink: 0;
+}
+
+.color-knob {
+  position: absolute;
+  width: 52px; height: 52px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 34%, #3c3c52, #18181e);
+  border: 2px solid rgba(255,255,255,0.15);
+  box-shadow:
+    0 4px 14px rgba(0,0,0,0.55),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  position: absolute;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.color-knob-arc {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+}
+
+.color-knob-tick {
+  position: absolute;
+  width: 2px;
+  height: 10px;
+  border-radius: 1px;
+  background: #fff;
+  /* bottom edge sits at the knob center; pivot is therefore bottom-center */
+  bottom: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  transform: translateX(-50%) rotate(-135deg);
+  box-shadow: 0 0 4px rgba(255,255,255,0.8);
+  pointer-events: none;
+}
+
+/* Radial stop labels around the knob */
+.ckl {
+  position: absolute;
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.03em;
+  line-height: 1;
+  text-align: center;
+  width: 14px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: color 0.15s;
+}
+.ckl.active { color: #fff; }
+
+.knob-label {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* ── Beat Loop Selector ─── */
@@ -315,24 +517,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 50px;
+  gap: 3px;
+  margin-top: 4px;
 }
 
 .beat-loop-row {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 .beat-loop-btn {
-  width: 28px; height: 28px;
-  border-radius: 6px;
+  width: 20px; height: 20px;
+  border-radius: 5px;
   border: 1px solid rgba(123,92,255,0.45);
   background: rgba(123,92,255,0.12);
   color: #a78bfa;
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1;
   display: flex;
   align-items: center;
@@ -345,76 +546,12 @@
 .beat-loop-btn:active { background: rgba(123,92,255,0.3); }
 
 .beat-loop-val {
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 800;
   color: var(--accent);
-  min-width: 28px;
+  min-width: 22px;
   text-align: center;
   line-height: 1;
-}
-
-/* ── Intensity Knob ─── */
-.intensity-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  height: 50px;
-}
-
-.intensity-knob {
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 38% 34%, #3c3c52, #18181e);
-  border: 2px solid rgba(123,92,255,0.35);
-  box-shadow:
-    0 4px 14px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.08);
-  position: relative;
-  cursor: pointer;
-  touch-action: none;
-}
-
-.knob-arc-track {
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from -135deg,
-    var(--accent) 0deg,
-    var(--accent) 189deg,
-    rgba(255,255,255,0.08) 189deg,
-    rgba(255,255,255,0.08) 270deg,
-    transparent 270deg
-  );
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-  mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px));
-}
-
-.knob-tick {
-  position: absolute;
-  width: 2px;
-  height: 10px;
-  border-radius: 1px;
-  background: #fff;
-  top: 4px;
-  left: 50%;
-  transform-origin: 50% 13px;
-  transform: translateX(-50%) rotate(54deg);
-  box-shadow: 0 0 5px rgba(123,92,255,0.9);
-}
-
-.knob-value {
-  display: none;
-}
-
-.knob-label {
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
 /* ── FX Pad Grid ─── */
@@ -696,7 +833,8 @@ input[type=range].master-fader::-moz-range-thumb {
       <div class="nav-label">Screens</div>
       <a href="/" class="nav-link">Overview</a>
       <a href="/performance" class="nav-link active">Live</a>
-      <a href="/configure" class="nav-link">Configure</a>
+      <a href="/setup" class="nav-link">Fixture Setup</a>
+      <a href="/zones" class="nav-link">Zones</a>
       <a href="/timeline" class="nav-link">Tracks</a>
     </div>
   </nav>
@@ -727,82 +865,111 @@ input[type=range].master-fader::-moz-range-thumb {
             </div>
           </div>
 
-          <!-- ── Deck A ── -->
-          <div class="deck-content" id="deck1">
-            <div class="deck-meta-row">
-              <div class="bpm-badge"><div class="bpm-dot"></div> 128 BPM · Linked</div>
-              <div class="deck-badge live">LIVE</div>
-              <div class="mode-pill" data-deck="1" data-mode-idx="2" onclick="cycleMode(this)" style="background:#ff8800">Hype</div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#0055ff"></div><span class="palette-chip-label">Primary</span></div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#8800ff"></div><span class="palette-chip-label">Secondary</span></div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#ff2200"></div><span class="palette-chip-label">Accent</span></div>
-            </div>
-            <div class="deck-art-row">
-              <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #6a3ccc, #1a0a40)"></div>
-              <div class="deck-track-info">
-                <div class="track-title">Come Alive</div>
-                <div class="track-artist">DJ Snake · Energy: High</div>
-              </div>
-            </div>
-            <div class="merged-time-row">
-              <span class="perf-time">3:28</span>
-              <span class="perf-time remaining">-2:14</span>
-            </div>
-            <div class="pcm-merged-wrap" id="deck1-map-wrap">
-              <div class="pcm-merged-map">
-                <div class="pcm-seg" style="width:15%;background:rgba(0,85,255,0.45)"></div>
-                <div class="pcm-seg" style="width:25%;background:rgba(0,85,255,0.82)"></div>
-                <div class="pcm-seg" style="width:25%;background:#ff2200"><div class="pcm-label">Drop 1</div></div>
-                <div class="pcm-seg" style="width:20%;background:rgba(136,0,255,0.55)"></div>
-                <div class="pcm-seg" style="width:15%;background:rgba(136,0,255,0.35)"></div>
-              </div>
-              <div class="blend-tint" id="deck1-blend-tint"></div>
-              <div class="pcm-unplayed-dim"></div>
-              <div class="pcm-playhead-line"></div>
-            </div>
-          </div>
+          <!-- ── Decks Side-by-Side ── -->
+          <div class="decks-section">
 
-          <!-- ── Deck B ── -->
-          <div class="deck-content" id="deck2">
-            <div class="deck-meta-row">
-              <div class="bpm-badge" style="background:rgba(255,140,66,0.1);border-color:rgba(255,140,66,0.3);color:var(--orange)">
-                <div class="bpm-dot" style="background:var(--orange)"></div> 130 BPM · Cued
+            <!-- Deck A -->
+            <div class="deck-col" id="deck1">
+              <div class="deck-pill-row">
+                <div class="bpm-badge"><div class="bpm-dot"></div> 128 BPM</div>
+                <div class="deck-badge live">LIVE</div>
+                <div class="mode-pill" data-deck="1" data-mode-idx="2" onclick="cycleMode(this)" style="background:#ff8800">Hype</div>
               </div>
-              <div class="deck-badge cue">CUE</div>
-              <div class="mode-pill" data-deck="2" data-mode-idx="0" onclick="cycleMode(this)" style="background:#4488ff">Chill</div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#ff5500"></div><span class="palette-chip-label">Primary</span></div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#cc0066"></div><span class="palette-chip-label">Secondary</span></div>
-              <div class="palette-chip"><div class="palette-dot" style="background:#ffffff"></div><span class="palette-chip-label">Accent</span></div>
+              <div class="deck-art-swatches">
+                <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #6a3ccc, #1a0a40)"></div>
+                <div class="deck-swatches-stack">
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#0055ff"></div><span class="swatch-label">Primary</span></div>
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#8800ff"></div><span class="swatch-label">Secondary</span></div>
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#ff2200"></div><span class="swatch-label">Accent</span></div>
+                </div>
+              </div>
+              <div class="blend-tint" id="deck1-blend-tint" style="border-radius:0"></div>
             </div>
-            <div class="deck-art-row">
-              <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #cc5500, #1a0800)"></div>
-              <div class="deck-track-info">
-                <div class="track-title">Titanium (DJ Edit)</div>
-                <div class="track-artist">David Guetta · Energy: Medium</div>
+
+            <!-- Transition column -->
+            <div class="transition-col">
+              <div class="transition-col-label">Style</div>
+              <div class="transition-pills">
+                <div class="transition-pill" onclick="selectTransition(this)">Cut</div>
+                <div class="transition-pill active" onclick="selectTransition(this)">Fade</div>
+                <div class="transition-pill" onclick="selectTransition(this)">Blend</div>
               </div>
             </div>
-            <div class="merged-time-row">
-              <span class="perf-time">0:00</span>
-              <span class="perf-time remaining" style="color:var(--orange)">-5:42</span>
-            </div>
-            <div class="pcm-merged-wrap" id="deck2-map-wrap">
-              <div class="pcm-merged-map">
-                <div class="pcm-seg" style="width:20%;background:rgba(255,85,0,0.42)"></div>
-                <div class="pcm-seg" style="width:30%;background:rgba(255,85,0,0.82)"></div>
-                <div class="pcm-seg" style="width:30%;background:rgba(255,255,255,0.88)"></div>
-                <div class="pcm-seg" style="width:20%;background:rgba(204,0,102,0.55)"></div>
+
+            <!-- Deck B -->
+            <div class="deck-col" id="deck2">
+              <div class="deck-pill-row">
+                <div class="bpm-badge" style="background:rgba(255,140,66,0.1);border-color:rgba(255,140,66,0.3);color:var(--orange)">
+                  <div class="bpm-dot" style="background:var(--orange)"></div> 130 BPM
+                </div>
+                <div class="deck-badge cue">CUE</div>
+                <div class="mode-pill" data-deck="2" data-mode-idx="0" onclick="cycleMode(this)" style="background:#4488ff">Chill</div>
               </div>
-              <div class="blend-tint" id="deck2-blend-tint"></div>
-              <div class="pcm-unplayed-dim" style="left:0%"></div>
-              <div class="pcm-playhead-line" style="left:0%"></div>
+              <div class="deck-art-swatches">
+                <div class="album-art" style="background:radial-gradient(circle at 38% 32%, #cc5500, #1a0800)"></div>
+                <div class="deck-swatches-stack">
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#ff5500"></div><span class="swatch-label">Primary</span></div>
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#cc0066"></div><span class="swatch-label">Secondary</span></div>
+                  <div class="swatch-item"><div class="swatch-dot" style="background:#ffffff"></div><span class="swatch-label">Accent</span></div>
+                </div>
+              </div>
+              <div class="blend-tint" id="deck2-blend-tint" style="border-radius:0"></div>
             </div>
-          </div>
+
+          </div><!-- /decks-section -->
+
+          <!-- ── Timelines (stacked) ── -->
+          <div class="timelines-section">
+            <!-- Deck A timeline -->
+            <div class="deck-timeline" id="deck1-timeline">
+              <div class="merged-time-row">
+                <span class="perf-time">3:28</span>
+                <span class="perf-time remaining">-2:14</span>
+              </div>
+              <div class="pcm-merged-wrap" id="deck1-map-wrap">
+                <div class="pcm-merged-map">
+                  <div class="pcm-seg" style="width:15%;background:rgba(0,85,255,0.45)"></div>
+                  <div class="pcm-seg" style="width:25%;background:rgba(0,85,255,0.82)"></div>
+                  <div class="pcm-seg" style="width:25%;background:#ff2200"><div class="pcm-label">Drop 1</div></div>
+                  <div class="pcm-seg" style="width:20%;background:rgba(136,0,255,0.55)"></div>
+                  <div class="pcm-seg" style="width:15%;background:rgba(136,0,255,0.35)"></div>
+                </div>
+                <div class="pcm-unplayed-dim"></div>
+                <div class="pcm-playhead-line"></div>
+              </div>
+            </div>
+            <!-- Deck B timeline -->
+            <div class="deck-timeline" id="deck2-timeline">
+              <div class="merged-time-row">
+                <span class="perf-time">0:00</span>
+                <span class="perf-time remaining" style="color:var(--orange)">-5:42</span>
+              </div>
+              <div class="pcm-merged-wrap" id="deck2-map-wrap">
+                <div class="pcm-merged-map">
+                  <div class="pcm-seg" style="width:20%;background:rgba(255,85,0,0.42)"></div>
+                  <div class="pcm-seg" style="width:30%;background:rgba(255,85,0,0.82)"></div>
+                  <div class="pcm-seg" style="width:30%;background:rgba(255,255,255,0.88)"></div>
+                  <div class="pcm-seg" style="width:20%;background:rgba(204,0,102,0.55)"></div>
+                </div>
+                <div class="pcm-unplayed-dim" style="left:0%"></div>
+                <div class="pcm-playhead-line" style="left:0%"></div>
+              </div>
+            </div>
+          </div><!-- /timelines-section -->
 
           <!-- ── Effects Panel ── -->
           <div class="section-label">Effects</div>
           <div class="fx-panel">
-            <!-- Beat Loop + Intensity Knob -->
+            <!-- Color Knob + Beat Loop -->
             <div class="knob-wrap">
+              <div class="color-knob-container" id="color-knob-container">
+                <canvas class="color-knob-arc" id="color-knob-arc" width="84" height="84"></canvas>
+                <div class="color-knob" id="color-knob">
+                  <div class="color-knob-tick" id="color-knob-tick"></div>
+                </div>
+                <!-- stop labels injected by JS -->
+              </div>
+              <div class="knob-label">Color</div>
               <!-- Beat Loop selector -->
               <div class="beat-loop-wrap">
                 <div class="beat-loop-row">
@@ -811,14 +978,6 @@ input[type=range].master-fader::-moz-range-thumb {
                   <div class="beat-loop-btn" onclick="beatLoopStep(1)">&#9655;</div>
                 </div>
                 <div class="knob-label">Beat Loop</div>
-              </div>
-              <div class="intensity-wrap">
-                <div class="intensity-knob">
-                  <div class="knob-arc-track"></div>
-                  <div class="knob-tick"></div>
-                </div>
-                <div class="knob-value">70%</div>
-                <div class="knob-label">Intensity</div>
               </div>
             </div>
             <!-- FX Pads: row 1 = beat-loop pads (Strobe, Flash, Chase), row 2 = free pads -->
@@ -965,6 +1124,12 @@ input[type=range].master-fader::-moz-range-thumb {
 // ── Deck switching is a no-op — both decks always visible ──────
 function switchDeck(n) { /* both decks always visible, bridge tints still work */ }
 
+// ── Transition Style Selector ───────────────────────────────────
+function selectTransition(pill) {
+  document.querySelectorAll('.transition-pill').forEach(function(p) { p.classList.remove('active'); });
+  pill.classList.add('active');
+}
+
 // ── Mode Pill — cycles Chill → Bounce → Hype → Drop ───────────
 var MODES = ['Chill', 'Bounce', 'Hype', 'Drop'];
 var MODE_COLORS = { Chill: '#4488ff', Bounce: '#44cc66', Hype: '#ff8800', Drop: '#ff2233' };
@@ -1057,27 +1222,146 @@ function toggleFx(pad) {
   if (!wasActive) pad.classList.add('active');
 }
 
-// ── Intensity Knob ──────────────────────────────────────────────
+// ── Color Knob ───────────────────────────────────────────────────
 (function() {
-  var knob = document.querySelector('.intensity-knob');
-  var arcTrack = document.querySelector('.knob-arc-track');
-  var tick = document.querySelector('.knob-tick');
-  var valueLabel = document.querySelector('.knob-value');
+  // 10 stops: Out, R, O, Y, G, C, B, P, M, W
+  // Each stop has a label, a hue color for the arc, and a tick glow color.
+  // "Out" = black (no color), "W" = white.
+  var STOPS = [
+    { label: 'Out', color: [20,  20,  20 ] },
+    { label: 'R',   color: [255, 30,  30 ] },
+    { label: 'O',   color: [255, 120, 0  ] },
+    { label: 'Y',   color: [240, 230, 0  ] },
+    { label: 'G',   color: [0,   210, 60 ] },
+    { label: 'C',   color: [0,   210, 220] },
+    { label: 'B',   color: [30,  80,  255] },
+    { label: 'P',   color: [140, 40,  255] },
+    { label: 'M',   color: [255, 0,   180] },
+    { label: 'W',   color: [255, 255, 255] }
+  ];
+
+  // Knob sweep: -135° (left) to +135° (right) = 270° total
+  var START_DEG = -135;
+  var SWEEP     = 270;
+  var N         = STOPS.length - 1; // 9 intervals
+
+  var container = document.getElementById('color-knob-container');
+  var canvas    = document.getElementById('color-knob-arc');
+  var knob      = document.getElementById('color-knob');
+  var tick      = document.getElementById('color-knob-tick');
+  var ctx       = canvas.getContext('2d');
+
   var isDragging = false;
   var lastY = 0;
-  var currentPct = 70;
+  // position as 0..1 (0 = Out, 1 = W), default to Out
+  var currentT = 0;
 
-  function applyKnob(pct) {
-    pct = Math.max(0, Math.min(100, pct));
-    currentPct = pct;
-    var angleDeg = -135 + (pct / 100) * 270;
-    var arcDeg = (pct / 100) * 270;
-    tick.style.transform = 'translateX(-50%) rotate(' + angleDeg + 'deg)';
-    arcTrack.style.background = 'conic-gradient(from -135deg, var(--accent) 0deg, var(--accent) ' + arcDeg + 'deg, rgba(255,255,255,0.08) ' + arcDeg + 'deg, rgba(255,255,255,0.08) 270deg, transparent 270deg)';
-    valueLabel.textContent = Math.round(pct) + '%';
+  // Inject radial stop labels
+  var R_LABEL = 44; // radius from center of container for labels
+  var CX = 42, CY = 42; // center of 84×84 container
+  var labelEls = STOPS.map(function(stop, i) {
+    var angleDeg = START_DEG + (i / N) * SWEEP;
+    var angleRad = (angleDeg - 90) * Math.PI / 180;
+    var x = CX + R_LABEL * Math.cos(angleRad);
+    var y = CY + R_LABEL * Math.sin(angleRad);
+    var el = document.createElement('div');
+    el.className = 'ckl';
+    el.textContent = stop.label;
+    el.style.left = x + 'px';
+    el.style.top  = y + 'px';
+    container.appendChild(el);
+    return el;
+  });
+
+  function lerpColor(a, b, t) {
+    return [
+      Math.round(a[0] + (b[0] - a[0]) * t),
+      Math.round(a[1] + (b[1] - a[1]) * t),
+      Math.round(a[2] + (b[2] - a[2]) * t)
+    ];
   }
 
-  applyKnob(currentPct);
+  function colorAtT(t) {
+    var scaled = t * N;
+    var i = Math.min(Math.floor(scaled), N - 1);
+    var frac = scaled - i;
+    return lerpColor(STOPS[i].color, STOPS[i + 1].color, frac);
+  }
+
+  function rgbStr(c) { return 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')'; }
+  function rgbaStr(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+
+  function drawArc(t) {
+    var W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+    var cx = W / 2, cy = H / 2, r = W / 2;
+    var lineW = 4;
+
+    // Full arc track (dim background)
+    var startRad = (START_DEG - 90) * Math.PI / 180;
+    var endRad   = (START_DEG + SWEEP - 90) * Math.PI / 180;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r - lineW / 2, startRad, endRad);
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = lineW;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+
+    // Colored filled arc up to current position — drawn as gradient segments
+    if (t > 0) {
+      var segments = 60;
+      var arcSweepRad = t * SWEEP * Math.PI / 180;
+      for (var s = 0; s < segments; s++) {
+        var t0 = (s / segments) * t;
+        var t1 = ((s + 1) / segments) * t;
+        var a0 = (START_DEG - 90 + t0 * SWEEP) * Math.PI / 180;
+        var a1 = (START_DEG - 90 + t1 * SWEEP) * Math.PI / 180;
+        var c  = colorAtT((t0 + t1) / 2);
+        ctx.beginPath();
+        ctx.arc(cx, cy, r - lineW / 2, a0, a1);
+        ctx.strokeStyle = rgbStr(c);
+        ctx.lineWidth = lineW;
+        ctx.lineCap = 'butt';
+        ctx.stroke();
+      }
+      // Round cap at end
+      var capAngle = (START_DEG - 90 + t * SWEEP) * Math.PI / 180;
+      var capC = colorAtT(t);
+      ctx.beginPath();
+      ctx.arc(cx, cy, r - lineW / 2, capAngle - 0.01, capAngle + 0.01);
+      ctx.strokeStyle = rgbStr(capC);
+      ctx.lineWidth = lineW + 1;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+    }
+  }
+
+  function applyKnob(t) {
+    t = Math.max(0, Math.min(1, t));
+    currentT = t;
+
+    // Tick angle
+    var angleDeg = START_DEG + t * SWEEP;
+    tick.style.transform = 'translateX(-50%) rotate(' + angleDeg + 'deg)';
+
+    // Glow color
+    var c = colorAtT(t);
+    tick.style.boxShadow = '0 0 5px ' + rgbaStr(c, 0.9);
+    knob.style.borderColor = rgbaStr(c, 0.5);
+
+    // Arc canvas
+    drawArc(t);
+
+    // Label highlights — nearest stop
+    var nearestIdx = Math.round(t * N);
+    labelEls.forEach(function(el, i) {
+      var dist = Math.abs(t * N - i);
+      el.classList.toggle('active', dist < 0.6);
+      el.style.color = dist < 0.6 ? rgbStr(STOPS[i].color) : '';
+    });
+  }
+
+  applyKnob(0);
 
   knob.addEventListener('mousedown', function(e) {
     isDragging = true;
@@ -1094,13 +1378,13 @@ function toggleFx(pad) {
     if (!isDragging) return;
     var delta = lastY - e.clientY;
     lastY = e.clientY;
-    applyKnob(currentPct + delta * 0.5);
+    applyKnob(currentT + delta / 200);
   });
   document.addEventListener('touchmove', function(e) {
     if (!isDragging) return;
     var delta = lastY - e.touches[0].clientY;
     lastY = e.touches[0].clientY;
-    applyKnob(currentPct + delta * 0.5);
+    applyKnob(currentT + delta / 200);
   }, { passive: false });
 
   document.addEventListener('mouseup', function() { isDragging = false; });
