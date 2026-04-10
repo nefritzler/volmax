@@ -751,6 +751,20 @@ input[type=range].master-fader::-moz-range-thumb {
   width: 100%;
 }
 
+.sync-all-label {
+  font-size: 7px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  text-align: center;
+  width: 100%;
+}
+.sync-all-row {
+  display: flex;
+  gap: 3px;
+  width: 100%;
+}
 .sync-all-btn {
   font-size: 7px;
   font-weight: 700;
@@ -762,7 +776,7 @@ input[type=range].master-fader::-moz-range-thumb {
   background: rgba(123,92,255,0.15);
   color: #a78bfa;
   cursor: pointer;
-  width: 100%;
+  flex: 1;
   text-align: center;
 }
 .sync-all-btn:active {
@@ -823,15 +837,25 @@ input[type=range].master-fader::-moz-range-thumb {
   transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
-.zone-col.synced {
-  border-color: rgba(123,92,255,0.55);
-  background: rgba(123,92,255,0.09);
-  box-shadow: 0 0 10px rgba(123,92,255,0.22);
+.zone-col.synced .vert-fader-wrap {
+  background: rgba(255,230,80,0.15);
+  border-radius: 6px;
+}
+
+.zone-col.fx-synced {
+  border-color: rgba(60,120,255,0.9);
+  background: rgba(60,120,255,0.22);
+  box-shadow: 0 0 10px rgba(60,120,255,0.45);
 }
 
 .zone-col.muted {
   opacity: 0.42;
   border-color: rgba(255,30,30,0.45);
+}
+
+.output-master-col.bri-active .vert-fader-wrap {
+  background: rgba(255,230,80,0.15);
+  border-radius: 6px;
 }
 
 /* Zone buttons at bottom */
@@ -842,29 +866,37 @@ input[type=range].master-fader::-moz-range-thumb {
   justify-content: center;
 }
 
-.zone-mute-btn, .zone-sync-btn {
+.zone-bri-btn, .zone-fx-btn, .zone-out-btn {
   font-size: 7px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  padding: 2px 5px;
+  padding: 2px 0;
   border-radius: 5px;
   border: 1px solid var(--border);
-  background: var(--surface);
+  background: var(--surface2);
   color: var(--text-muted);
   cursor: pointer;
+  min-width: 22px;
+  text-align: center;
 }
 
-.zone-mute-btn.muted {
-  background: rgba(255,30,30,0.15);
-  border-color: rgba(255,30,30,0.7);
-  color: #ff4444;
-}
-
-.zone-sync-btn.synced {
+.zone-bri-btn.synced {
   background: rgba(123,92,255,0.18);
   border-color: rgba(123,92,255,0.65);
   color: #a78bfa;
+}
+
+.zone-fx-btn.synced {
+  background: rgba(123,92,255,0.18);
+  border-color: rgba(123,92,255,0.65);
+  color: #a78bfa;
+}
+
+.zone-out-btn.active {
+  background: rgba(255,30,30,0.15);
+  border-color: rgba(255,30,30,0.7);
+  color: #ff4444;
 }
 </style>
 </head>
@@ -1082,7 +1114,7 @@ input[type=range].master-fader::-moz-range-thumb {
             <div class="output-layout">
 
               <!-- Master column -->
-              <div class="output-master-col">
+              <div class="output-master-col" id="master-col">
                 <span class="col-label">Master</span>
                 <div class="vert-fader-wrap">
                   <input type="range" class="vert-slider master-fader" id="master-brightness"
@@ -1091,14 +1123,16 @@ input[type=range].master-fader::-moz-range-thumb {
                     oninput="masterSliderInput(this)">
                 </div>
                 <div class="master-btns">
-                  <button class="sync-all-btn" onclick="syncAll()">Sync All</button>
+                  <span class="sync-all-label">Sync All</span>
+                  <div class="sync-all-row">
+                    <button class="sync-all-btn" onclick="syncAllBri()">BRI</button>
+                    <button class="sync-all-btn" onclick="syncAllFx()">FX</button>
+                  </div>
                   <div class="ctrl-btn freeze" id="freeze-btn" onclick="toggleCtrl(this)">
-                    <span class="ctrl-btn-icon">❄</span>
                     <span class="ctrl-btn-label">Freeze</span>
                   </div>
                   <div class="ctrl-btn blackout" id="blackout-btn" onclick="toggleBlackout()">
-                    <span class="ctrl-btn-icon">◼</span>
-                    <span class="ctrl-btn-label">Blackout</span>
+                    <span class="ctrl-btn-label">OUT</span>
                   </div>
                 </div>
               </div>
@@ -1112,8 +1146,9 @@ input[type=range].master-fader::-moz-range-thumb {
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="100" orient="vertical">
                   </div>
                   <div class="zone-btns">
-                    <button class="zone-mute-btn" onclick="toggleZoneMute('zone-fl',this)">Mute</button>
-                    <button class="zone-sync-btn" onclick="toggleZoneSync('zone-fl',this)">Sync</button>
+                    <button class="zone-bri-btn" onclick="toggleZoneBri('zone-fl',this)">BRI</button>
+                    <button class="zone-fx-btn" onclick="toggleZoneFx('zone-fl',this)">FX</button>
+                    <button class="zone-out-btn" onclick="toggleZoneOut('zone-fl',this)">⏻</button>
                   </div>
                 </div>
 
@@ -1123,8 +1158,9 @@ input[type=range].master-fader::-moz-range-thumb {
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="100" orient="vertical">
                   </div>
                   <div class="zone-btns">
-                    <button class="zone-mute-btn" onclick="toggleZoneMute('zone-fr',this)">Mute</button>
-                    <button class="zone-sync-btn" onclick="toggleZoneSync('zone-fr',this)">Sync</button>
+                    <button class="zone-bri-btn" onclick="toggleZoneBri('zone-fr',this)">BRI</button>
+                    <button class="zone-fx-btn" onclick="toggleZoneFx('zone-fr',this)">FX</button>
+                    <button class="zone-out-btn" onclick="toggleZoneOut('zone-fr',this)">⏻</button>
                   </div>
                 </div>
 
@@ -1134,8 +1170,9 @@ input[type=range].master-fader::-moz-range-thumb {
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="85" orient="vertical">
                   </div>
                   <div class="zone-btns">
-                    <button class="zone-mute-btn" onclick="toggleZoneMute('zone-bl',this)">Mute</button>
-                    <button class="zone-sync-btn" onclick="toggleZoneSync('zone-bl',this)">Sync</button>
+                    <button class="zone-bri-btn" onclick="toggleZoneBri('zone-bl',this)">BRI</button>
+                    <button class="zone-fx-btn" onclick="toggleZoneFx('zone-bl',this)">FX</button>
+                    <button class="zone-out-btn" onclick="toggleZoneOut('zone-bl',this)">⏻</button>
                   </div>
                 </div>
 
@@ -1145,8 +1182,9 @@ input[type=range].master-fader::-moz-range-thumb {
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="85" orient="vertical">
                   </div>
                   <div class="zone-btns">
-                    <button class="zone-mute-btn" onclick="toggleZoneMute('zone-br',this)">Mute</button>
-                    <button class="zone-sync-btn" onclick="toggleZoneSync('zone-br',this)">Sync</button>
+                    <button class="zone-bri-btn" onclick="toggleZoneBri('zone-br',this)">BRI</button>
+                    <button class="zone-fx-btn" onclick="toggleZoneFx('zone-br',this)">FX</button>
+                    <button class="zone-out-btn" onclick="toggleZoneOut('zone-br',this)">⏻</button>
                   </div>
                 </div>
 
@@ -1232,35 +1270,75 @@ function toggleCtrl(el) {
   el.classList.toggle('active');
 }
 
-function toggleZoneMute(zoneId, btn) {
-  var zone = document.getElementById(zoneId);
-  var muted = zone.classList.toggle('muted');
-  btn.classList.toggle('muted', muted);
-  btn.textContent = muted ? 'Muted' : 'Mute';
+function updateMasterBri() {
+  var anyBri = ['zone-fl', 'zone-fr', 'zone-bl', 'zone-br'].some(function(id) {
+    return document.getElementById(id).classList.contains('synced');
+  });
+  document.getElementById('master-col').classList.toggle('bri-active', anyBri);
 }
 
-function toggleZoneSync(zoneId, btn) {
+function toggleZoneBri(zoneId, btn) {
   var zone = document.getElementById(zoneId);
   var synced = zone.classList.toggle('synced');
   btn.classList.toggle('synced', synced);
   if (synced) {
-    // Snap zone fader to master value when syncing
     var masterVal = document.getElementById('master-brightness').value;
     zone.querySelector('.zone-fader').value = masterVal;
   }
+  updateMasterBri();
 }
 
-// ── Sync All: set all zones to master value, mark them synced ──
-function syncAll() {
+function toggleZoneFx(zoneId, btn) {
+  var zone = document.getElementById(zoneId);
+  var active = zone.classList.toggle('fx-synced');
+  btn.classList.toggle('synced', active);
+}
+
+function toggleZoneOut(zoneId, btn) {
+  var zone = document.getElementById(zoneId);
+  var muted = zone.classList.toggle('muted');
+  btn.classList.toggle('active', muted);
+}
+
+// ── Sync All BRI: toggle-all — on if any off, off if all on ──
+function syncAllBri() {
+  var ids = ['zone-fl', 'zone-fr', 'zone-bl', 'zone-br'];
+  var allOn = ids.every(function(id) {
+    return document.getElementById(id).classList.contains('synced');
+  });
   var master = document.getElementById('master-brightness');
   var val = master.value;
-  ['zone-fl', 'zone-fr', 'zone-bl', 'zone-br'].forEach(function(id) {
+  ids.forEach(function(id) {
     var col = document.getElementById(id);
-    col.classList.add('synced');
-    col.querySelector('.zone-fader').value = val;
-    var syncBtn = col.querySelector('.zone-sync-btn');
-    syncBtn.classList.add('synced');
-    syncBtn.textContent = 'Sync';
+    var briBtn = col.querySelector('.zone-bri-btn');
+    if (allOn) {
+      col.classList.remove('synced');
+      briBtn.classList.remove('synced');
+    } else {
+      col.classList.add('synced');
+      col.querySelector('.zone-fader').value = val;
+      briBtn.classList.add('synced');
+    }
+  });
+  updateMasterBri();
+}
+
+// ── Sync All FX: toggle-all — on if any off, off if all on ──
+function syncAllFx() {
+  var ids = ['zone-fl', 'zone-fr', 'zone-bl', 'zone-br'];
+  var allOn = ids.every(function(id) {
+    return document.getElementById(id).classList.contains('fx-synced');
+  });
+  ids.forEach(function(id) {
+    var col = document.getElementById(id);
+    var fxBtn = col.querySelector('.zone-fx-btn');
+    if (allOn) {
+      col.classList.remove('fx-synced');
+      fxBtn.classList.remove('synced');
+    } else {
+      col.classList.add('fx-synced');
+      fxBtn.classList.add('synced');
+    }
   });
 }
 
@@ -1280,10 +1358,7 @@ function toggleBlackout() {
   var active = btn.classList.toggle('active');
   ['zone-fl', 'zone-fr', 'zone-bl', 'zone-br'].forEach(function(id) {
     var zone = document.getElementById(id);
-    var muteBtn = zone.querySelector('.zone-mute-btn');
     zone.classList.toggle('muted', active);
-    muteBtn.classList.toggle('muted', active);
-    muteBtn.textContent = active ? 'Muted' : 'Mute';
   });
 }
 
