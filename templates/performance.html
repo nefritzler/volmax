@@ -392,6 +392,34 @@
   transition: color 0.15s;
 }
 
+/* Transition color preview swatches */
+.transition-preview-row {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.transition-preview-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.transition-preview-swatch {
+  width: 18px;
+  height: 30px;
+  border-radius: 5px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: #333;
+  transition: background 0.2s ease;
+}
+.transition-preview-item-label {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
 /* Transition center column */
 .transition-col {
   display: flex;
@@ -608,9 +636,27 @@
   gap: 5px;
 }
 
-/* Beat-loop pads (row 1: Strobe, Flash, Chase) get a subtle tinted border */
+/* Beat-loop pads (row 2: Strobe, Pong, Chase) get a subtle tinted border */
 .fx-pad.beat-pad {
   border-color: rgba(123,92,255,0.28);
+}
+
+.auto-btn {
+  font-size: 10px;
+  padding: 2px 5px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-dim);
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  line-height: 1;
+}
+.auto-btn.active {
+  background: rgba(60,120,255,0.22);
+  border-color: rgba(60,120,255,0.9);
+  color: #fff;
 }
 
 .fx-pad {
@@ -703,19 +749,25 @@ input[type=range].master-fader::-webkit-slider-runnable-track {
 
 input[type=range].vert-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 0 0 2px rgba(80,140,255,0.7), 0 1px 4px rgba(0,0,0,0.5);
+  width: 36px;
+  height: 10px;
+  border-radius: 3px;
+  background: #ccc;
+  border: 1px solid #555;
   cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 input[type=range].master-fader::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
-  background: #c4aaff;
-  box-shadow: 0 0 0 2px rgba(123,92,255,0.85), 0 1px 6px rgba(0,0,0,0.5);
+  -webkit-appearance: none;
+  width: 36px;
+  height: 10px;
+  border-radius: 3px;
+  background: #ddd;
+  border: 1px solid #555;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Firefox vertical */
@@ -729,18 +781,22 @@ input[type=range].master-fader::-moz-range-track {
   width: 5px;
 }
 input[type=range].vert-slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #fff;
-  border: none;
-  box-shadow: 0 0 0 2px rgba(80,140,255,0.7);
+  width: 36px;
+  height: 10px;
+  border-radius: 3px;
+  background: #ccc;
+  border: 1px solid #555;
+  margin-left: auto;
+  margin-right: auto;
 }
 input[type=range].master-fader::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: #c4aaff;
-  border: none;
+  width: 36px;
+  height: 10px;
+  border-radius: 3px;
+  background: #ddd;
+  border: 1px solid #555;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Master control buttons below fader */
@@ -898,6 +954,37 @@ input[type=range].master-fader::-moz-range-thumb {
   border-color: rgba(255,30,30,0.7);
   color: #ff4444;
 }
+
+/* ── Zone Color Bars ── */
+.zone-color-bars {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+}
+.zone-bar {
+  flex: 1;
+  height: 10px;
+  border-radius: 2px;
+  background: #333;
+  transition: background 0.2s ease;
+}
+
+@keyframes fx-strobe-kf { 0%,100%{opacity:0} 50%{opacity:1} }
+@keyframes fx-flash-kf  { 0%,100%{opacity:1} 50%{opacity:0.2} }
+@keyframes fx-pulse-kf  { 0%,100%{opacity:1} 50%{opacity:0.4} }
+@keyframes fx-pong-kf   { 0%{filter:brightness(1.8)} 100%{filter:brightness(0.3)} }
+
+.zone-bar.fx-strobe            { animation: fx-strobe-kf 0.1s infinite; }
+.zone-bar.fx-flash             { animation: fx-flash-kf 0.4s infinite; }
+.zone-bar.fx-pulse             { animation: fx-pulse-kf 1.5s ease-in-out infinite; }
+.zone-bar.fx-chase             { animation: fx-pulse-kf 0.45s ease-in-out infinite; }
+.zone-bar-secondary.fx-chase   { animation-delay: -0.15s; }
+.zone-bar-accent.fx-chase      { animation-delay: -0.30s; }
+.zone-bar.fx-pong              { animation: fx-pong-kf 0.5s alternate infinite; }
+.zone-bar-secondary.fx-pong    { animation-direction: alternate-reverse; }
+.zone-bar.fx-solo              { opacity: 0.2; }
+.zone-bar-primary.fx-solo      { opacity: 1; }
 </style>
 </head>
 <body>
@@ -985,6 +1072,16 @@ input[type=range].master-fader::-moz-range-thumb {
 
             <!-- Transition column -->
             <div class="transition-col">
+              <div class="transition-preview-row">
+                <div class="transition-preview-item">
+                  <div class="transition-preview-swatch" id="deck1-color-preview"></div>
+                  <div class="transition-preview-item-label">A</div>
+                </div>
+                <div class="transition-preview-item">
+                  <div class="transition-preview-swatch" id="deck2-color-preview"></div>
+                  <div class="transition-preview-item-label">B</div>
+                </div>
+              </div>
               <div class="transition-col-label">Style</div>
               <div class="transition-pills">
                 <div class="transition-pill" onclick="selectTransition(this)">Cut</div>
@@ -1086,25 +1183,29 @@ input[type=range].master-fader::-moz-range-thumb {
                 </div>
                 <!-- stop labels injected by JS -->
               </div>
-              <div class="knob-label">Color</div>
+              <div style="display:flex;align-items:center;gap:4px;justify-content:center;">
+                <div class="knob-label">Color</div>
+                <div class="auto-btn auto-color-btn" onclick="toggleAutoColor(this)">AUTO</div>
+              </div>
               <!-- Beat Loop selector -->
               <div class="beat-loop-wrap">
                 <div class="beat-loop-row">
                   <div class="beat-loop-btn" onclick="beatLoopStep(-1)">&#9665;</div>
                   <div class="beat-loop-val" id="beat-loop-val">1</div>
                   <div class="beat-loop-btn" onclick="beatLoopStep(1)">&#9655;</div>
+                  <div class="auto-btn auto-beat-btn" onclick="toggleAutoBeat(this)">AUTO</div>
                 </div>
                 <div class="knob-label">Beat Loop</div>
               </div>
             </div>
-            <!-- FX Pads: row 1 = beat-loop pads (Strobe, Flash, Chase), row 2 = free pads -->
+            <!-- FX Pads: row 1 = free pads, row 2 = beat-loop pads (Strobe, Pong, Chase) -->
             <div class="fx-grid">
-              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
-              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Pong</div></div>
-              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Color Wash</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Solo</div></div>
               <div class="fx-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Fade</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Strobe</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Pong</div></div>
+              <div class="fx-pad beat-pad" onclick="toggleFx(this)" onmousedown="this.classList.add('pressing')" onmouseup="this.classList.remove('pressing')" onmouseleave="this.classList.remove('pressing')"><div class="fx-name">Chase</div></div>
             </div>
           </div>
 
@@ -1121,6 +1222,9 @@ input[type=range].master-fader::-moz-range-thumb {
                     min="0" max="100" value="100"
                     orient="vertical"
                     oninput="masterSliderInput(this)">
+                </div>
+                <div class="zone-color-bars" data-zone="master">
+                  <div class="zone-bar zone-bar-primary"></div>
                 </div>
                 <div class="master-btns">
                   <span class="sync-all-label">Sync All</span>
@@ -1145,6 +1249,9 @@ input[type=range].master-fader::-moz-range-thumb {
                   <div class="vert-fader-wrap">
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="100" orient="vertical">
                   </div>
+                  <div class="zone-color-bars" data-zone="fl">
+                    <div class="zone-bar zone-bar-primary"></div>
+                  </div>
                   <div class="zone-btns">
                     <button class="zone-bri-btn" onclick="toggleZoneBri('zone-fl',this)">BRI</button>
                     <button class="zone-fx-btn" onclick="toggleZoneFx('zone-fl',this)">FX</button>
@@ -1156,6 +1263,9 @@ input[type=range].master-fader::-moz-range-thumb {
                   <span class="col-label">FR</span>
                   <div class="vert-fader-wrap">
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="100" orient="vertical">
+                  </div>
+                  <div class="zone-color-bars" data-zone="fr">
+                    <div class="zone-bar zone-bar-primary"></div>
                   </div>
                   <div class="zone-btns">
                     <button class="zone-bri-btn" onclick="toggleZoneBri('zone-fr',this)">BRI</button>
@@ -1169,6 +1279,9 @@ input[type=range].master-fader::-moz-range-thumb {
                   <div class="vert-fader-wrap">
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="85" orient="vertical">
                   </div>
+                  <div class="zone-color-bars" data-zone="bl">
+                    <div class="zone-bar zone-bar-primary"></div>
+                  </div>
                   <div class="zone-btns">
                     <button class="zone-bri-btn" onclick="toggleZoneBri('zone-bl',this)">BRI</button>
                     <button class="zone-fx-btn" onclick="toggleZoneFx('zone-bl',this)">FX</button>
@@ -1180,6 +1293,9 @@ input[type=range].master-fader::-moz-range-thumb {
                   <span class="col-label">BR</span>
                   <div class="vert-fader-wrap">
                     <input type="range" class="vert-slider zone-fader" min="0" max="100" value="85" orient="vertical">
+                  </div>
+                  <div class="zone-color-bars" data-zone="br">
+                    <div class="zone-bar zone-bar-primary"></div>
                   </div>
                   <div class="zone-btns">
                     <button class="zone-bri-btn" onclick="toggleZoneBri('zone-br',this)">BRI</button>
@@ -1376,10 +1492,26 @@ function toggleBlackout() {
 })();
 
 // ── FX Pads ─────────────────────────────────────────────────────
+function toggleAutoBeat(btn) { btn.classList.toggle('active'); }
+function toggleAutoColor(btn) { btn.classList.toggle('active'); }
+
+function applyZoneBarFx(fxName) {
+  var FX_MAP = {
+    'Strobe': 'fx-strobe', 'Pong': 'fx-pong', 'Chase': 'fx-chase',
+    'Solo': 'fx-solo', 'Fade': 'fx-flash', 'Color Wash': 'fx-pulse'
+  };
+  var ALL_FX = ['fx-strobe', 'fx-flash', 'fx-chase', 'fx-pong', 'fx-pulse', 'fx-solo'];
+  document.querySelectorAll('.zone-bar').forEach(function(bar) {
+    ALL_FX.forEach(function(cls) { bar.classList.remove(cls); });
+    if (fxName && FX_MAP[fxName]) bar.classList.add(FX_MAP[fxName]);
+  });
+}
+
 function toggleFx(pad) {
   var wasActive = pad.classList.contains('active');
   document.querySelectorAll('.fx-pad').forEach(function(p) { p.classList.remove('active'); });
   if (!wasActive) pad.classList.add('active');
+  applyZoneBarFx(wasActive ? null : pad.querySelector('.fx-name').textContent);
 }
 
 // ── Color Knob Factory ───────────────────────────────────────────
@@ -1482,13 +1614,19 @@ function initColorKnob(opts) {
 
   opts.disc.addEventListener('mousedown', function(e) { isDragging = true; lastY = e.clientY; e.preventDefault(); });
   opts.disc.addEventListener('touchstart', function(e) { isDragging = true; lastY = e.touches[0].clientY; e.preventDefault(); }, { passive: false });
+  var SNAP_THRESHOLD = 15 / SWEEP;
+  function snapT(t) {
+    if (t < SNAP_THRESHOLD) return 0;
+    if (t > 1 - SNAP_THRESHOLD) return 1;
+    return t;
+  }
   document.addEventListener('mousemove', function(e) {
     if (!isDragging) return;
-    var d = lastY - e.clientY; lastY = e.clientY; applyKnob(currentT + d / 200);
+    var d = lastY - e.clientY; lastY = e.clientY; applyKnob(snapT(currentT + d / 200));
   });
   document.addEventListener('touchmove', function(e) {
     if (!isDragging) return;
-    var d = lastY - e.touches[0].clientY; lastY = e.touches[0].clientY; applyKnob(currentT + d / 200);
+    var d = lastY - e.touches[0].clientY; lastY = e.touches[0].clientY; applyKnob(snapT(currentT + d / 200));
   }, { passive: false });
   document.addEventListener('mouseup',  function() { isDragging = false; });
   document.addEventListener('touchend', function() { isDragging = false; });
@@ -1519,6 +1657,28 @@ var deckColors = {
   '2': { primary: null, secondary: null, accent: null }
 };
 
+var activeDeck = '1';
+
+function updateZoneBars() {
+  var wrap = document.getElementById('deck' + activeDeck + '-map-wrap');
+  if (!wrap) return;
+  var playhead = wrap.querySelector('.pcm-playhead-line');
+  var pct = parseFloat(playhead ? playhead.style.left : '0') / 100;
+  var segs = wrap.querySelectorAll('.pcm-seg[data-phase]');
+  var cumulative = 0, activePhase = null;
+  segs.forEach(function(seg) {
+    if (activePhase !== null) return;
+    cumulative += parseFloat(seg.style.width) / 100;
+    if (pct <= cumulative) activePhase = seg.dataset.phase;
+  });
+  if (!activePhase && segs.length) activePhase = segs[segs.length - 1].dataset.phase;
+  var c = deckColors[activeDeck][activePhase];
+  var bg = c ? 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')' : '#333';
+  document.querySelectorAll('.zone-bar-primary').forEach(function(bar) {
+    bar.style.background = bg;
+  });
+}
+
 function updateDeckTimeline(deckId) {
   var colors = deckColors[deckId];
   var map = document.querySelector('#deck' + deckId + '-map-wrap .pcm-merged-map');
@@ -1527,6 +1687,27 @@ function updateDeckTimeline(deckId) {
     var c = colors[seg.dataset.phase];
     if (c) seg.style.background = 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.82)';
   });
+}
+
+function updateTransitionPreview() {
+  [1, 2].forEach(function(deckId) {
+    var wrap = document.getElementById('deck' + deckId + '-map-wrap');
+    var preview = document.getElementById('deck' + deckId + '-color-preview');
+    if (!wrap || !preview) return;
+    var playhead = wrap.querySelector('.pcm-playhead-line');
+    var pct = parseFloat(playhead ? playhead.style.left : '0') / 100;
+    var segs = wrap.querySelectorAll('.pcm-seg[data-phase]');
+    var cumulative = 0, activePhase = null;
+    segs.forEach(function(seg) {
+      if (activePhase !== null) return;
+      cumulative += parseFloat(seg.style.width) / 100;
+      if (pct <= cumulative) activePhase = seg.dataset.phase;
+    });
+    if (!activePhase && segs.length) activePhase = segs[segs.length - 1].dataset.phase;
+    var c = deckColors[String(deckId)][activePhase];
+    preview.style.background = c ? 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')' : '#333';
+  });
+  updateZoneBars();
 }
 
 // Init all deck mini color knobs
@@ -1545,9 +1726,11 @@ document.querySelectorAll('.mini-knob-container[data-deck]').forEach(function(co
     onChange: function(color) {
       deckColors[deck][channel] = color;
       updateDeckTimeline(deck);
+      updateTransitionPreview();
     }
   });
 });
+updateTransitionPreview();
 
 // ── djay Bridge — WebSocket + color blend ───────────────────────
 (function() {
