@@ -208,6 +208,18 @@
   color: rgba(255,255,255,0.95);
   white-space: nowrap;
 }
+.pcm-seg-label {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  pointer-events: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
 
 /* ── Track Color Palette ─── */
 .track-palette {
@@ -975,13 +987,13 @@ input[type=range].master-fader::-moz-range-thumb {
 @keyframes fx-pulse-kf  { 0%,100%{opacity:1} 50%{opacity:0.4} }
 @keyframes fx-pong-kf   { 0%{filter:brightness(1.8)} 100%{filter:brightness(0.3)} }
 
-.zone-bar.fx-strobe            { animation: fx-strobe-kf 0.1s infinite; }
-.zone-bar.fx-flash             { animation: fx-flash-kf 0.4s infinite; }
-.zone-bar.fx-pulse             { animation: fx-pulse-kf 1.5s ease-in-out infinite; }
-.zone-bar.fx-chase             { animation: fx-pulse-kf 0.45s ease-in-out infinite; }
-.zone-bar-secondary.fx-chase   { animation-delay: -0.15s; }
-.zone-bar-accent.fx-chase      { animation-delay: -0.30s; }
-.zone-bar.fx-pong              { animation: fx-pong-kf 0.5s alternate infinite; }
+.zone-bar.fx-strobe            { animation: fx-strobe-kf var(--fx-beat-duration, 0.5s) infinite; }
+.zone-bar.fx-flash             { animation: fx-flash-kf var(--fx-beat-duration, 0.5s) infinite; }
+.zone-bar.fx-pulse             { animation: fx-pulse-kf var(--fx-beat-duration, 0.5s) ease-in-out infinite; }
+.zone-bar.fx-chase             { animation: fx-pulse-kf var(--fx-beat-duration, 0.5s) ease-in-out infinite; }
+.zone-bar-secondary.fx-chase   { animation-delay: calc(var(--fx-beat-duration, 0.5s) * -0.33); }
+.zone-bar-accent.fx-chase      { animation-delay: calc(var(--fx-beat-duration, 0.5s) * -0.67); }
+.zone-bar.fx-pong              { animation: fx-pong-kf var(--fx-beat-duration, 0.5s) alternate infinite; }
 .zone-bar-secondary.fx-pong    { animation-direction: alternate-reverse; }
 .zone-bar.fx-solo              { opacity: 0.2; }
 .zone-bar-primary.fx-solo      { opacity: 1; }
@@ -1142,11 +1154,15 @@ input[type=range].master-fader::-moz-range-thumb {
               </div>
               <div class="pcm-merged-wrap" id="deck1-map-wrap">
                 <div class="pcm-merged-map">
-                  <div class="pcm-seg" data-phase="primary"   style="width:15%"></div>
-                  <div class="pcm-seg" data-phase="primary"   style="width:25%"></div>
-                  <div class="pcm-seg" data-phase="accent"    style="width:25%"><div class="pcm-label">Drop 1</div></div>
-                  <div class="pcm-seg" data-phase="secondary" style="width:20%"></div>
-                  <div class="pcm-seg" data-phase="primary"   style="width:15%"></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Intro"       style="width:8%"><span  class="pcm-seg-label">Intro</span></div>
+                  <div class="pcm-seg" data-phase="secondary" data-label="Verse"       style="width:12%"><span class="pcm-seg-label">Verse</span></div>
+                  <div class="pcm-seg" data-phase="secondary" data-label="Pre-Chorus"  style="width:7%"><span  class="pcm-seg-label">Pre-Chorus</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Chorus"      style="width:18%"><span class="pcm-seg-label">Chorus</span></div>
+                  <div class="pcm-seg" data-phase="secondary" data-label="Verse"       style="width:10%"><span class="pcm-seg-label">Verse</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Chorus"      style="width:18%"><span class="pcm-seg-label">Chorus</span></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Bridge"      style="width:10%"><span class="pcm-seg-label">Bridge</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Drop"        style="width:12%"><span class="pcm-seg-label">Drop</span></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Outro"       style="width:5%"><span  class="pcm-seg-label">Outro</span></div>
                 </div>
                 <div class="pcm-unplayed-dim"></div>
                 <div class="pcm-playhead-line"></div>
@@ -1160,10 +1176,14 @@ input[type=range].master-fader::-moz-range-thumb {
               </div>
               <div class="pcm-merged-wrap" id="deck2-map-wrap">
                 <div class="pcm-merged-map">
-                  <div class="pcm-seg" data-phase="primary"   style="width:20%"></div>
-                  <div class="pcm-seg" data-phase="secondary" style="width:30%"></div>
-                  <div class="pcm-seg" data-phase="accent"    style="width:30%"></div>
-                  <div class="pcm-seg" data-phase="primary"   style="width:20%"></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Intro"  style="width:10%"><span class="pcm-seg-label">Intro</span></div>
+                  <div class="pcm-seg" data-phase="secondary" data-label="Verse"  style="width:15%"><span class="pcm-seg-label">Verse</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Chorus" style="width:18%"><span class="pcm-seg-label">Chorus</span></div>
+                  <div class="pcm-seg" data-phase="secondary" data-label="Build"  style="width:12%"><span class="pcm-seg-label">Build</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Drop"   style="width:20%"><span class="pcm-seg-label">Drop</span></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Break"  style="width:10%"><span class="pcm-seg-label">Break</span></div>
+                  <div class="pcm-seg" data-phase="accent"    data-label="Chorus" style="width:10%"><span class="pcm-seg-label">Chorus</span></div>
+                  <div class="pcm-seg" data-phase="primary"   data-label="Outro"  style="width:5%"><span  class="pcm-seg-label">Outro</span></div>
                 </div>
                 <div class="pcm-unplayed-dim" style="left:0%"></div>
                 <div class="pcm-playhead-line" style="left:0%"></div>
@@ -1360,6 +1380,19 @@ input[type=range].master-fader::-moz-range-thumb {
 </div>
 
 <script>
+// ── Phase label map ─────────────────────────────────────────────
+var phaseLabels = {
+  intro: 'Intro',
+  verse: 'Verse',
+  'pre-chorus': 'Pre-Chorus',
+  chorus: 'Chorus',
+  build: 'Build',
+  drop: 'Drop',
+  bridge: 'Bridge',
+  outro: 'Outro',
+  break: 'Break'
+};
+
 // ── Deck switching is a no-op — both decks always visible ──────
 function switchDeck(n) { /* both decks always visible, bridge tints still work */ }
 
@@ -1488,7 +1521,10 @@ function toggleBlackout() {
   window.beatLoopStep = function(dir) {
     idx = Math.max(0, Math.min(DIVISIONS.length - 1, idx + dir));
     label.textContent = DIVISIONS[idx];
+    updateFxAnimationSpeed();
   };
+
+  window.getCurrentBeatDivision = function() { return DIVISIONS[idx]; };
 })();
 
 // ── FX Pads ─────────────────────────────────────────────────────
@@ -1512,6 +1548,7 @@ function toggleFx(pad) {
   document.querySelectorAll('.fx-pad').forEach(function(p) { p.classList.remove('active'); });
   if (!wasActive) pad.classList.add('active');
   applyZoneBarFx(wasActive ? null : pad.querySelector('.fx-name').textContent);
+  updateZoneBars();
 }
 
 // ── Color Knob Factory ───────────────────────────────────────────
@@ -1640,7 +1677,11 @@ initColorKnob({
   tick:        document.getElementById('color-knob-tick'),
   labelClass:  'ckl',
   labelRadius: 44,
-  arcLineW:    4
+  arcLineW:    4,
+  onChange: function(color) {
+    currentEffectColor = color;
+    updateZoneBars();
+  }
 });
 
 // ── Deck timeline color state ────────────────────────────────────
@@ -1659,7 +1700,24 @@ var deckColors = {
 
 var activeDeck = '1';
 
+var currentEffectColor = null;
+
+function updateFxAnimationSpeed() {
+  var DIV_DURATIONS = { '1/8': 0.25, '1/4': 0.5, '1/2': 1, '1': 2, '2': 4, '4': 8 };
+  var div = typeof getCurrentBeatDivision === 'function' ? getCurrentBeatDivision() : '1/4';
+  var dur = DIV_DURATIONS[div] || 0.5;
+  document.documentElement.style.setProperty('--fx-beat-duration', dur + 's');
+}
+
 function updateZoneBars() {
+  var activeFxPad = document.querySelector('.fx-pad.active');
+  var bg;
+  if (activeFxPad && currentEffectColor) {
+    var c = currentEffectColor;
+    bg = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+    document.querySelectorAll('.zone-bar').forEach(function(bar) { bar.style.background = bg; });
+    return;
+  }
   var wrap = document.getElementById('deck' + activeDeck + '-map-wrap');
   if (!wrap) return;
   var playhead = wrap.querySelector('.pcm-playhead-line');
@@ -1673,7 +1731,7 @@ function updateZoneBars() {
   });
   if (!activePhase && segs.length) activePhase = segs[segs.length - 1].dataset.phase;
   var c = deckColors[activeDeck][activePhase];
-  var bg = c ? 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')' : '#333';
+  bg = c ? 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')' : '#333';
   document.querySelectorAll('.zone-bar-primary').forEach(function(bar) {
     bar.style.background = bg;
   });
